@@ -15,8 +15,6 @@ public class ServerPlayerController : NetworkBehaviour
     
     private ServerPlayerController player;
 
-    public GameObject rollMenu;
-
     [Header("Events")]
     [HideInInspector] public UnityEvent OnRollStart;
     [HideInInspector] public UnityEvent OnRollJump;
@@ -87,6 +85,11 @@ public class ServerPlayerController : NetworkBehaviour
         SplineKnotData data = splineKnotData.splineDatas[index.Spline].knots[index.Knot];
         data.EnterKnot(splineKnotAnimator, stats);
         OnMovementUpdate.Invoke(splineKnotAnimator.Step);
+    }
+    //HandleMovement
+    public void ContinueMovement()
+    {
+        splineKnotAnimator.Paused = false;
     }
 
 

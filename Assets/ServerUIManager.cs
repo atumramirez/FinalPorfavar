@@ -3,8 +3,12 @@ using UnityEngine;
 
 public class ServerUIManager : NetworkBehaviour
 {
+    //Movement UI
     [SerializeField] private GameObject RollMenu;
     [SerializeField] private GameObject JunctionMenu;
+
+    [SerializeField] private GameObject ShopPrompt;
+
     public void ShowRollButton()
     {
         ShowRollButtonClientRpc();
@@ -20,7 +24,19 @@ public class ServerUIManager : NetworkBehaviour
         HideAllButtonsClientRpc();
     }
 
-    //Network Stuff
+    public void ShowShopPromptUI()
+    {
+        ShowShopPromptUIClientRpc();
+    }
+
+    public void HideShopPromptUI()
+    {
+        HideShopPromptUIClientRpc();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     [ClientRpc]
     private void ShowRollButtonClientRpc()
     {
@@ -40,5 +56,17 @@ public class ServerUIManager : NetworkBehaviour
     {
         RollMenu.SetActive(false);
         JunctionMenu.SetActive(false);
+    }
+
+    [ClientRpc]
+    private void ShowShopPromptUIClientRpc()
+    {
+        ShopPrompt.SetActive(true);
+    }
+
+    [ClientRpc]
+    private void HideShopPromptUIClientRpc()
+    {
+        ShopPrompt.SetActive(false);
     }
 }

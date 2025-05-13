@@ -3,7 +3,9 @@ using Unity.Netcode;
 using System.Numerics;
 
 public class ClientPlayerUIController : NetworkBehaviour
-{    
+{
+    [SerializeField] private ServerUIManager serverUIManager;
+
     public void RollDiceButton()
     {
         RollDiceServerRpc();
@@ -17,6 +19,11 @@ public class ClientPlayerUIController : NetworkBehaviour
     public void ConfirmJuctionButton()
     {
         ConfirmJuctionServerRpc();
+    }
+
+    public void ExitShopPrompt()
+    {
+        ExitShopPromptServerRpc();
     }
 
     //Server Stuff
@@ -53,6 +60,19 @@ public class ClientPlayerUIController : NetworkBehaviour
         {
             Debug.Log("Objeto encontrado.");
             controller.ConfirmJuction();
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void ExitShopPromptServerRpc()
+    {
+        GameObject playerObj = GameObject.FindWithTag("PlayerTag");
+        Debug.Log("Procurar objeto.");
+        if (playerObj != null && playerObj.TryGetComponent(out ServerPlayerController controller))
+        {
+            Debug.Log("Objeto encontrado.");
+            controller.ContinueMovement();
+            serverUIManager.HideShopPromptUI();
         }
     }
 }

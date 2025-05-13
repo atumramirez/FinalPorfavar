@@ -14,13 +14,13 @@ public class ShopPromptUI : MonoBehaviour
         yesButton.onClick.AddListener(() =>
         {
             onYes?.Invoke();
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         });
 
         noButton.onClick.AddListener(() =>
         {
             onNo?.Invoke();
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         });
     }
 }

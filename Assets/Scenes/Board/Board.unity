@@ -339,6 +339,8 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   stats: {fileID: 945198140}
   splineKnotAnimator: {fileID: 945198141}
+  serverUIManager: {fileID: 0}
+  rollMenu: {fileID: 0}
   OnRollStart:
     m_PersistentCalls:
       m_Calls: []
@@ -1463,7 +1465,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa00886f74ea8402c90ad732c8cdcdce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
   splineContainer: {fileID: 1548331311}
   prefabToInstantiate: {fileID: 1306393644908063418, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
   positionOffset: {x: 0, y: 0, z: 0}
@@ -2679,7 +2680,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2105413772
 Transform:
   m_ObjectHideFlags: 0

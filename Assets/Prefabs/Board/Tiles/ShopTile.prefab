@@ -1,0 +1,101 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &1338312335666179561
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1306393644908063418, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      propertyPath: m_Name
+      value: S1K2 Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 2386689859771500068, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      propertyPath: spaceEvent
+      value: 
+      objectReference: {fileID: 2507701927782058275}
+    - target: {fileID: 2386689859771500068, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      propertyPath: pauseMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2386689859771500068, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      propertyPath: skipStepCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2386689859771500068, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      propertyPath: knotIndex.Knot
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2386689859771500068, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      propertyPath: knotIndex.Spline
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6483488183396550753, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 58.5459
+      objectReference: {fileID: 0}
+    - target: {fileID: 6483488183396550753, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6483488183396550753, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.4898586
+      objectReference: {fileID: 0}
+    - target: {fileID: 6483488183396550753, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9859002
+      objectReference: {fileID: 0}
+    - target: {fileID: 6483488183396550753, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6483488183396550753, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.16733453
+      objectReference: {fileID: 0}
+    - target: {fileID: 6483488183396550753, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6483488183396550753, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6483488183396550753, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6483488183396550753, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1306393644908063418, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2507701927782058275}
+  m_SourcePrefab: {fileID: 100100000, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+--- !u!1 &50557622074820435 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1306393644908063418, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
+  m_PrefabInstance: {fileID: 1338312335666179561}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2507701927782058275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50557622074820435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ee3c5076e948ed418632b8cd4f8c377, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shopUIPrefab: {fileID: 7301397967298864236, guid: 0c6faed9bbc4b6d4c958100212e554a3, type: 3}
+  shopPromptPrefab: {fileID: 7226844278547030147, guid: b42881850491ff94181f7875f4ec13b8, type: 3}

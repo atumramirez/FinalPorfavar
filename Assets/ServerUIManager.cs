@@ -3,27 +3,78 @@ using UnityEngine;
 
 public class ServerUIManager : NetworkBehaviour
 {
-    //Movement UI
+    ///
+    [SerializeField] private TurnManager turnManager;
+
+    /// <summary>
+    /// Menu Cliente
+    /// </summary>
+    [SerializeField] private GameObject ReadyMenu;
+    [SerializeField] private GameObject ClientMenu;
+
+    /// <summary>
+    /// Menus
+    /// </summary>
+    [Header("Client Buttons")]
+    [SerializeField] private GameObject PlayerMenu;
     [SerializeField] private GameObject RollMenu;
+
+    [Header("Junction")]
     [SerializeField] private GameObject JunctionMenu;
 
-    [SerializeField] private GameObject ShopPrompt;
+    //[SerializeField] private GameObject ShopPrompt;
 
-    public void ShowRollButton()
+    public void ShowReadyMenu(ulong targetClientId)
     {
-        ShowRollButtonClientRpc();
+        var clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new[] { targetClientId }
+            }
+        };
+
+        ShowReadyMenuClientRpc(clientRpcParams);
     }
 
-    public void ShowJunctionButtons()
+    public void ShowClientMenu(ulong targetClientId)
     {
-        ShowJunctionButtonsClientRpc();
+        var clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new[] { targetClientId }
+            }
+        };
+
+        ShowClientMenuClientRpc(clientRpcParams);
     }
 
-    public void HideAllButtons()
+    public void ShowJunctionButtons(ulong targetClientId)
     {
-        HideAllButtonsClientRpc();
+        var clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new[] { targetClientId }
+            }
+        };
+        ShowJunctionButtonsClientRpc(clientRpcParams);
     }
 
+    public void HideAllButtons(ulong targetClientId)
+    {
+        var clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new[] { targetClientId }
+            }
+        };
+        HideAllButtonsClientRpc(clientRpcParams);
+    }
+
+    /*
     public void ShowShopPromptUI()
     {
         ShowShopPromptUIClientRpc();
@@ -33,31 +84,49 @@ public class ServerUIManager : NetworkBehaviour
     {
         HideShopPromptUIClientRpc();
     }
+    */
 
     /// <summary>
     /// 
     /// </summary>
+
     [ClientRpc]
-    private void ShowRollButtonClientRpc()
+    private void ShowReadyMenuClientRpc(ClientRpcParams clientRpcParams = default)
     {
-        RollMenu.SetActive(true);
+        ReadyMenu.SetActive(true);
+        ClientMenu.SetActive(false);
         JunctionMenu.SetActive(false);
     }
 
     [ClientRpc]
-    private void ShowJunctionButtonsClientRpc()
+    private void ShowClientMenuClientRpc(ClientRpcParams clientRpcParams = default)
     {
-        RollMenu.SetActive(false);
+        ReadyMenu.SetActive(false);
+        ClientMenu.SetActive(true);
+        JunctionMenu.SetActive(false);
+    }
+
+    [ClientRpc]
+    private void ShowJunctionButtonsClientRpc(ClientRpcParams clientRpcParams = default)
+    {
+        ReadyMenu.SetActive(false);
+        ClientMenu.SetActive(false);
         JunctionMenu.SetActive(true);
     }
 
     [ClientRpc]
-    private void HideAllButtonsClientRpc()
+    private void HideAllButtonsClientRpc(ClientRpcParams clientRpcParams = default)
     {
-        RollMenu.SetActive(false);
+        ReadyMenu.SetActive(false);
+        ClientMenu.SetActive(false);
         JunctionMenu.SetActive(false);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// 
+    /*
     [ClientRpc]
     private void ShowShopPromptUIClientRpc()
     {
@@ -69,4 +138,5 @@ public class ServerUIManager : NetworkBehaviour
     {
         ShopPrompt.SetActive(false);
     }
+    */
 }

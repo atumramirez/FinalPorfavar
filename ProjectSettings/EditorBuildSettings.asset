@@ -8,13 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/JoinHost.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Swipe.unity
     guid: 235c432417589c74ca0183ddfd5a2370
   - enabled: 1
     path: Assets/Scenes/Board/Try.unity
     guid: 7dc9e402c5c730b479cf212fa26e1fbc
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Board/Board.unity
     guid: ad55d1ab2dd0d804ea30a7323b108c05
   - enabled: 0
@@ -29,6 +29,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/RollBall.unity
     guid: ee6e232cb00641148ad307abc1df5833
+  - enabled: 0
+    path: Assets/Scenes/Board/Map.unity
+    guid: cc4781b0eaa36a548bb21ffe084ab157
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

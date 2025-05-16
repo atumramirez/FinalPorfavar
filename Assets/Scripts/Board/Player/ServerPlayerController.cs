@@ -1,19 +1,21 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 using UnityEngine.Splines;
-using Unity.Netcode;
-using UnityEngine.XR;
 
-public class ServerPlayerController : NetworkBehaviour
+public class ServerPlayerController : MonoBehaviour
 {
     [SerializeField] private PlayerStats stats;
     [SerializeField] private SplineKnotAnimate splineKnotAnimator;
     [SerializeField] private ServerUIManager serverUIManager;
+    [SerializeField] private TurnManager turnManager;
+
     private SplineKnotInstantiate splineKnotData;
-    
-    private ServerPlayerController player;
+    private int index = 0;
+    private int currentClient = 1;
+
+    public bool isReady = false;
+    public bool asRolled = false;
 
     [Header("Events")]
     [HideInInspector] public UnityEvent OnRollStart;
@@ -33,88 +35,115 @@ public class ServerPlayerController : NetworkBehaviour
         splineKnotAnimator.OnKnotEnter.AddListener(OnKnotEnter);
         splineKnotAnimator.OnKnotLand.AddListener(OnKnotLand);
 
-        if (FindAnyObjectByType<SplineKnotInstantiate>() != null)
-            splineKnotData = FindAnyObjectByType<SplineKnotInstantiate>();
+        splineKnotData = FindAnyObjectByType<SplineKnotInstantiate>();
+        index = turnManager.players.IndexOf(this); 
 
-
-        player = GetComponent<ServerPlayerController>();
+        if (index == -1)
+        {
+            Debug.LogError("This player is not registered in TurnManager!");
+        }
     }
 
-    //Controlls
+
+    public void ConfirmTurn()
+    {
+        if (!IsMyTurn()) return;
+
+        isReady = true;
+        Debug.Log("CONFIRMOU TURNO");
+    }
+
     public void RollDice()
     {
+        if (!IsMyTurn()) return;
+
+        asRolled = true;
         int randomNumber = Random.Range(1, 7);
-        Debug.Log("Que Louco");
+        Debug.Log($"Player {index} rolled: {randomNumber}");
         splineKnotAnimator.Animate(randomNumber);
     }
 
     public void ChangeJunction(int direction)
     {
+        if (!IsMyTurn()) return;
         splineKnotAnimator.AddToJunctionIndex(direction);
     }
 
     public void ConfirmJuction()
     {
+        if (!IsMyTurn()) return;
         splineKnotAnimator.inJunction = false;
     }
 
-    //Tile stuff
     private void OnDestinationKnot(SplineKnotIndex index)
     {
-        SplineKnotData data = splineKnotData.splineDatas[index.Spline].knots[index.Knot];
+        var data = splineKnotData.splineDatas[index.Spline].knots[index.Knot];
         if (data.skipStepCount)
             splineKnotAnimator.SkipStepCount = true;
     }
 
     private void OnKnotLand(SplineKnotIndex index)
     {
-        SplineKnotData data = splineKnotData.splineDatas[index.Spline].knots[index.Knot];
+        var data = splineKnotData.splineDatas[index.Spline].knots[index.Knot];
 
         StartCoroutine(DelayCoroutine());
         IEnumerator DelayCoroutine()
         {
-            yield return new WaitForSeconds(.08f);
+            yield return new WaitForSeconds(0.08f);
             data.Land(stats);
             OnMovementStart.Invoke(false);
-            yield return new WaitForSeconds(2);
+            
+            if (IsMyTurn())
+                EndTurn();
+
+            yield return new WaitForSeconds(1.5f);
         }
     }
 
     private void OnKnotEnter(SplineKnotIndex index)
     {
-        SplineKnotData data = splineKnotData.splineDatas[index.Spline].knots[index.Knot];
+        var data = splineKnotData.splineDatas[index.Spline].knots[index.Knot];
         data.EnterKnot(splineKnotAnimator, stats);
         OnMovementUpdate.Invoke(splineKnotAnimator.Step);
     }
-    //HandleMovement
+
     public void ContinueMovement()
     {
         splineKnotAnimator.Paused = false;
     }
 
-
-    //Buttons
     void Update()
     {
-        if (player == null || splineKnotAnimator == null) return;
+        currentClient = turnManager.currentPlayerIndex + 1;
+        if (!IsMyTurn()) return;
 
-        if (!splineKnotAnimator.isMoving && !splineKnotAnimator.inJunction)
+        
+        if (!isReady)
         {
-            serverUIManager.ShowRollButton();
+            serverUIManager.ShowReadyMenu((ulong)currentClient);
+        }
+        else if (!splineKnotAnimator.isMoving && !splineKnotAnimator.inJunction && !asRolled)
+        {
+            serverUIManager.ShowClientMenu((ulong)currentClient);
         }
         else if (splineKnotAnimator.inJunction)
         {
-            serverUIManager.ShowJunctionButtons();
+            serverUIManager.ShowJunctionButtons((ulong)currentClient);
         }
         else
         {
-            serverUIManager.HideAllButtons();
+            serverUIManager.HideAllButtons((ulong)currentClient);
         }
     }
 
-    private void HandleMovementStart(bool moving)
+    private bool IsMyTurn()
     {
-        if (moving)
-            serverUIManager.HideAllButtons();
+        return turnManager.CurrentPlayer == this;
+    }
+
+    public void EndTurn()
+    {
+        serverUIManager.HideAllButtons((ulong)currentClient);
+        turnManager.EndPlayerTurn();
     }
 }

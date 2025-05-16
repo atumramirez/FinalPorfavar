@@ -5,8 +5,14 @@ using System.Numerics;
 public class ClientPlayerUIController : NetworkBehaviour
 {
     [SerializeField] private ServerUIManager serverUIManager;
+    [SerializeField] private ClientController clientController;
 
-    public void RollDiceButton()
+    public void SetReady()
+    {
+        SetReadyServerRpc();
+    }
+
+    public void RollDice()
     {
         RollDiceServerRpc();
     }
@@ -26,23 +32,42 @@ public class ClientPlayerUIController : NetworkBehaviour
         ExitShopPromptServerRpc();
     }
 
-    //Server Stuff
     [ServerRpc(RequireOwnership = false)]
-    private void RollDiceServerRpc()
+    private void SetReadyServerRpc(ServerRpcParams rpcParams = default)
     {
-        GameObject playerObj = GameObject.FindWithTag("PlayerTag");
-        Debug.Log("Procurar objeto.");
+        ulong clientId = rpcParams.Receive.SenderClientId;
+
+        string playerTag = $"Jogador{clientId}";
+
+        GameObject playerObj = GameObject.Find(playerTag);
         if (playerObj != null && playerObj.TryGetComponent(out ServerPlayerController controller))
         {
-            Debug.Log("Objeto encontrado.");
+            controller.ConfirmTurn();
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void RollDiceServerRpc(ServerRpcParams rpcParams = default)
+    {
+        ulong clientId = rpcParams.Receive.SenderClientId;
+
+        string playerTag = $"Jogador{clientId}";
+
+        GameObject playerObj = GameObject.Find(playerTag);
+        if (playerObj != null && playerObj.TryGetComponent(out ServerPlayerController controller))
+        {
             controller.RollDice();
         }
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void ChangeJunctionServerRpc(int direction)
+    private void ChangeJunctionServerRpc(int direction, ServerRpcParams rpcParams = default)
     {
-        GameObject playerObj = GameObject.FindWithTag("PlayerTag");
+        ulong clientId = rpcParams.Receive.SenderClientId;
+
+        string playerTag = $"Jogador{clientId}";
+
+        GameObject playerObj = GameObject.Find(playerTag);
         Debug.Log("Procurar objeto.");
         if (playerObj != null && playerObj.TryGetComponent(out ServerPlayerController controller))
         {
@@ -52,9 +77,13 @@ public class ClientPlayerUIController : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void ConfirmJuctionServerRpc()
+    private void ConfirmJuctionServerRpc(ServerRpcParams rpcParams = default)
     {
-        GameObject playerObj = GameObject.FindWithTag("PlayerTag");
+        ulong clientId = rpcParams.Receive.SenderClientId;
+
+        string playerTag = $"Jogador{clientId}";
+
+        GameObject playerObj = GameObject.Find(playerTag);
         Debug.Log("Procurar objeto.");
         if (playerObj != null && playerObj.TryGetComponent(out ServerPlayerController controller))
         {
@@ -72,7 +101,7 @@ public class ClientPlayerUIController : NetworkBehaviour
         {
             Debug.Log("Objeto encontrado.");
             controller.ContinueMovement();
-            serverUIManager.HideShopPromptUI();
+            //serverUIManager.HideShopPromptUI();
         }
     }
 }

@@ -15,23 +15,6 @@ public class ShopSpaceEvent : SpaceEvent
             return;
         }
 
-        // Show prompt
-        /*
-        ShopPromptUI prompt = Instantiate(shopPromptPrefab);
-        prompt.ShowPrompt(() =>
-        {
-            ShopUI shopUI = Instantiate(shopUIPrefab);
-            shopUI.OpenShop(player, () =>
-            {
-                animator.Paused = false;
-            });
-        },
-            () =>
-            {
-                animator.Paused = false;
-            });
-        */
-
-        serverUIManager.ShowShopPromptUI();
+        //serverUIManager.ShowShopPromptUI();
     }
 }

@@ -101,7 +101,6 @@ public class SplineKnotAnimate : MonoBehaviour
 
         while (currentT != nextT)
         {
-            // Move currentT toward nextT using the adjusted speed
             currentT = Mathf.MoveTowards(currentT, nextT, AdjustedMovementSpeed(spline) * Time.deltaTime);
             yield return null;
         }
@@ -220,7 +219,6 @@ public class SplineKnotAnimate : MonoBehaviour
 
         int divergingPaths = 0;
 
-        // Check each connected spline
         foreach (SplineKnotIndex connection in connectedKnots)
         {
             var spline = splineContainer.Splines[connection.Spline];
@@ -232,13 +230,11 @@ public class SplineKnotAnimate : MonoBehaviour
             }
         }
 
-        // Sort walkableKnots by spline index number
         walkableKnots.Sort((knot1, knot2) => knot1.Spline.CompareTo(knot2.Spline));
 
         if (divergingPaths <= 1)
             walkableKnots.Clear();
 
-        // If we have more than one path starting from this knot, it's an origin
         return divergingPaths > 1;
     }
 
@@ -251,7 +247,7 @@ public class SplineKnotAnimate : MonoBehaviour
 
     float AdjustedMovementSpeed(Spline spline)
     {
-        // Calculate the total spline length
+
         float splineLength = spline.GetLength();
 
         // Adjust speed relative to spline length

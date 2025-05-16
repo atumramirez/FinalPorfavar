@@ -14,6 +14,8 @@ public class PlayerStats : MonoBehaviour
     public List<Item> inventory = new List<Item>();
     [SerializeField] private int maxItems = 3;
 
+    [SerializeField] private PlayerStatsServerUI playerStatsServerUI;
+
     [HideInInspector] public UnityEvent OnInitialize;
     [HideInInspector] public UnityEvent<int> OnAnimation;
 
@@ -28,12 +30,14 @@ public class PlayerStats : MonoBehaviour
         coinsBeforeChange = coins;
         coins += amount;
         coins = Mathf.Clamp(coins, 0, 999);
+        playerStatsServerUI.UpdatePointPoints(coins);
     }
 
     public void AddStars(int amount)
     {
         stars += amount;
         stars = Mathf.Clamp(stars, 0, 999);
+        playerStatsServerUI.UpdatePointPoints(stars);
     }
 
     public void CoinAnimation(int value)

@@ -1,20 +1,19 @@
 using UnityEngine;
 
-public class SwipeToRoll : MonoBehaviour
+public class SwipeToRollOffile : MonoBehaviour
 {
-    [SerializeField] private ClientController controller;
-    [SerializeField] private ClientPlayerUIController clientPlayerUIController;
+    [SerializeField] private DiceMover m_Mover;
 
     private Vector2 touchStartPos;
     private Vector2 touchEndPos;
 
     [Header("Swipe Settings")]
-    public float minSwipeDistance = 100f; 
+    public float minSwipeDistance = 100f;
 
     void Update()
     {
 #if UNITY_EDITOR
-        HandleMouseInput();  
+        HandleMouseInput();
 #else
         HandleTouchInput();
 #endif
@@ -62,16 +61,7 @@ public class SwipeToRoll : MonoBehaviour
 
         if (verticalMove > minSwipeDistance && verticalMove > horizontalMove)
         {
-            clientPlayerUIController.RollDice();
+            m_Mover.Roll();
         }
-    }
-
-    /// <summary>
-    /// Voltar atras
-    /// </summary>
-
-    public void VoltarAtras()
-    {
-        controller.PressBack();
     }
 }

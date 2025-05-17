@@ -33,7 +33,7 @@ public class TurnManager : MonoBehaviour
         currentRound++;
         currentPlayerIndex = 0;
         OnRoundStart?.Invoke(currentRound);
-        Debug.Log("Ronda: " + currentRound);
+        Debug.Log("Round: " + currentRound);
         StartPlayerTurn();
     }
 

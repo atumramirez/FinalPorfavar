@@ -22,6 +22,10 @@ public class ServerUIManager : NetworkBehaviour
     [Header("Junction")]
     [SerializeField] private GameObject JunctionMenu;
 
+    [Header("Shop")]
+    [SerializeField] private GameObject ShopPromptMenu;
+    [SerializeField] private GameObject ShopMenu;
+
     //[SerializeField] private GameObject ShopPrompt;
 
     public void ShowReadyMenu(ulong targetClientId)
@@ -74,12 +78,12 @@ public class ServerUIManager : NetworkBehaviour
         HideAllButtonsClientRpc(clientRpcParams);
     }
 
-    /*
     public void ShowShopPromptUI()
     {
         ShowShopPromptUIClientRpc();
     }
 
+    /*
     public void HideShopPromptUI()
     {
         HideShopPromptUIClientRpc();
@@ -96,6 +100,7 @@ public class ServerUIManager : NetworkBehaviour
         ReadyMenu.SetActive(true);
         ClientMenu.SetActive(false);
         JunctionMenu.SetActive(false);
+        ShopMenu.SetActive(false);
     }
 
     [ClientRpc]
@@ -104,6 +109,7 @@ public class ServerUIManager : NetworkBehaviour
         ReadyMenu.SetActive(false);
         ClientMenu.SetActive(true);
         JunctionMenu.SetActive(false);
+        ShopMenu.SetActive(false);
     }
 
     [ClientRpc]
@@ -112,6 +118,7 @@ public class ServerUIManager : NetworkBehaviour
         ReadyMenu.SetActive(false);
         ClientMenu.SetActive(false);
         JunctionMenu.SetActive(true);
+        ShopMenu.SetActive(false);
     }
 
     [ClientRpc]
@@ -120,6 +127,16 @@ public class ServerUIManager : NetworkBehaviour
         ReadyMenu.SetActive(false);
         ClientMenu.SetActive(false);
         JunctionMenu.SetActive(false);
+        ShopMenu.SetActive(false);
+    }
+
+    [ClientRpc]
+    private void ShowShopPromptUIClientRpc(ClientRpcParams clientRpcParams = default)
+    {
+        ReadyMenu.SetActive(false);
+        ClientMenu.SetActive(false);
+        JunctionMenu.SetActive(false);
+        ShopMenu.SetActive(true);
     }
 
     /// <summary>
@@ -127,12 +144,6 @@ public class ServerUIManager : NetworkBehaviour
     /// </summary>
     /// 
     /*
-    [ClientRpc]
-    private void ShowShopPromptUIClientRpc()
-    {
-        ShopPrompt.SetActive(true);
-    }
-
     [ClientRpc]
     private void HideShopPromptUIClientRpc()
     {

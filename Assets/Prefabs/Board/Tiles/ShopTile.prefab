@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1306393644908063418, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
       propertyPath: m_Name
-      value: S1K2 Variant
+      value: ShopTile
       objectReference: {fileID: 0}
     - target: {fileID: 2386689859771500068, guid: 60124cbfe8234554081a91bdaf01b43e, type: 3}
       propertyPath: spaceEvent
@@ -97,5 +97,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ee3c5076e948ed418632b8cd4f8c377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shopUIPrefab: {fileID: 7301397967298864236, guid: 0c6faed9bbc4b6d4c958100212e554a3, type: 3}
-  shopPromptPrefab: {fileID: 7226844278547030147, guid: b42881850491ff94181f7875f4ec13b8, type: 3}
+  serverUIManager: {fileID: 7569804195199624844, guid: 127a3fa17735a7c469920b7cf3b9cc49, type: 3}

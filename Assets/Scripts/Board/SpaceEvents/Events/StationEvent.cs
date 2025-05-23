@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Shop Space Event", menuName = "BoardGame/SpaceEvents/Shop")]
-public class ShopSpaceEvent : SpaceEvent
+[CreateAssetMenu(fileName = "New Station Space Event", menuName = "BoardGame/SpaceEvents/Station")]
+public class StationEvent : SpaceEvent
 {
     [SerializeField] private ServerUIManager serverUIManager;
 
@@ -14,7 +14,5 @@ public class ShopSpaceEvent : SpaceEvent
             animator.Paused = false;
             return;
         }
-
-        serverUIManager.ShowShopPromptUI();
     }
 }

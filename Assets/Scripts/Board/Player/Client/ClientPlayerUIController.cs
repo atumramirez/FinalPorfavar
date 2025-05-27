@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Netcode;
 using System.Numerics;
+using UnityEngine.Splines;
 
 public class ClientPlayerUIController : NetworkBehaviour
 {
@@ -30,6 +31,11 @@ public class ClientPlayerUIController : NetworkBehaviour
     public void ExitShopPrompt()
     {
         ExitShopPromptServerRpc();
+    }
+
+    public void ConfirmStation()
+    {
+        
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -93,15 +99,33 @@ public class ClientPlayerUIController : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void ExitShopPromptServerRpc()
+    private void ExitShopPromptServerRpc(ServerRpcParams rpcParams = default)
     {
-        GameObject playerObj = GameObject.FindWithTag("PlayerTag");
+        ulong clientId = rpcParams.Receive.SenderClientId;
+
+        string playerTag = $"Jogador{clientId}";
+
+        GameObject playerObj = GameObject.Find(playerTag);
         Debug.Log("Procurar objeto.");
         if (playerObj != null && playerObj.TryGetComponent(out ServerPlayerController controller))
         {
             Debug.Log("Objeto encontrado.");
             controller.ContinueMovement();
-            //serverUIManager.HideShopPromptUI();
+            serverUIManager.HideShopPromptUI();
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void ConfirmStationServerRpc(ServerRpcParams rpcParams = default)
+    {
+        ulong clientId = rpcParams.Receive.SenderClientId;
+
+        string playerTag = $"Jogador{clientId}";
+
+        GameObject playerObj = GameObject.Find(playerTag);
+        Debug.Log("Procurar objeto.");
+        if (playerObj != null && playerObj.TryGetComponent(out SplineKnotAnimate controller))
+        {
         }
     }
 }

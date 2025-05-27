@@ -14,7 +14,7 @@ public class SplineKnotData : MonoBehaviour
     [SerializeField] public bool skipStepCount = false;
 
     [Header("Event")]
-    [SerializeField] private SpaceEvent spaceEvent;
+    [SerializeField] public SpaceEvent spaceEvent;
 
     private void OnValidate()
     {
@@ -32,10 +32,6 @@ public class SplineKnotData : MonoBehaviour
 
     public void Land(PlayerStats playerStats)
     {
-        playerStats.AddCoins(coinGain);
-        Debug.Log("Ganhasste dinheiro");
-        OnLand.Invoke(coinGain);
-
+        
     }
-
 }

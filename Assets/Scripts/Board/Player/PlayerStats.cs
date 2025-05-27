@@ -31,9 +31,22 @@ public class PlayerStats : MonoBehaviour
         coins = Mathf.Clamp(coins, 0, 999);
     }
 
+    public void RemoveCoins(int amount)
+    {
+        coinsBeforeChange = coins;
+        coins -= amount;
+        coins = Mathf.Clamp(coins, 0, 999);
+    }
+
     public void AddStars(int amount)
     {
         stars += amount;
+        stars = Mathf.Clamp(stars, 0, 999);
+    }
+
+    public void TakeDamage(int amount)
+    {
+        stars -= amount;
         stars = Mathf.Clamp(stars, 0, 999);
     }
 

@@ -1,16 +1,18 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Splines;
 
 public class ServerUIManager : NetworkBehaviour
 {
     ///
-    [SerializeField] private TurnManager turnManager;
+
 
     /// <summary>
     /// Menu Cliente
     /// </summary>
     [SerializeField] private GameObject ReadyMenu;
     [SerializeField] private GameObject ClientMenu;
+    [SerializeField] private GameObject StationPromptMenu;
 
     /// <summary>
     /// Menus
@@ -24,9 +26,9 @@ public class ServerUIManager : NetworkBehaviour
 
     [Header("Shop")]
     [SerializeField] private GameObject ShopPromptMenu;
-    [SerializeField] private GameObject ShopMenu;
 
-    //[SerializeField] private GameObject ShopPrompt;
+    [Header("Trap")]
+    [SerializeField] private GameObject TrapPromptMenu;
 
     public void ShowReadyMenu(ulong targetClientId)
     {
@@ -82,13 +84,10 @@ public class ServerUIManager : NetworkBehaviour
     {
         ShowShopPromptUIClientRpc();
     }
-
-    /*
     public void HideShopPromptUI()
     {
         HideShopPromptUIClientRpc();
     }
-    */
 
     /// <summary>
     /// 
@@ -100,7 +99,7 @@ public class ServerUIManager : NetworkBehaviour
         ReadyMenu.SetActive(true);
         ClientMenu.SetActive(false);
         JunctionMenu.SetActive(false);
-        ShopMenu.SetActive(false);
+        ShopPromptMenu.SetActive(false);
     }
 
     [ClientRpc]
@@ -109,7 +108,7 @@ public class ServerUIManager : NetworkBehaviour
         ReadyMenu.SetActive(false);
         ClientMenu.SetActive(true);
         JunctionMenu.SetActive(false);
-        ShopMenu.SetActive(false);
+        ShopPromptMenu.SetActive(false);
     }
 
     [ClientRpc]
@@ -118,7 +117,7 @@ public class ServerUIManager : NetworkBehaviour
         ReadyMenu.SetActive(false);
         ClientMenu.SetActive(false);
         JunctionMenu.SetActive(true);
-        ShopMenu.SetActive(false);
+        ShopPromptMenu.SetActive(false);
     }
 
     [ClientRpc]
@@ -127,7 +126,6 @@ public class ServerUIManager : NetworkBehaviour
         ReadyMenu.SetActive(false);
         ClientMenu.SetActive(false);
         JunctionMenu.SetActive(false);
-        ShopMenu.SetActive(false);
     }
 
     [ClientRpc]
@@ -136,18 +134,14 @@ public class ServerUIManager : NetworkBehaviour
         ReadyMenu.SetActive(false);
         ClientMenu.SetActive(false);
         JunctionMenu.SetActive(false);
-        ShopMenu.SetActive(true);
+        ShopPromptMenu.SetActive(true);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// 
-    /*
     [ClientRpc]
     private void HideShopPromptUIClientRpc()
     {
-        ShopPrompt.SetActive(false);
+        ShopPromptMenu.SetActive(false);
     }
-    */
+
+
 }

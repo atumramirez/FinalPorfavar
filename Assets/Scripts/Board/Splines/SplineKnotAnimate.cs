@@ -34,6 +34,9 @@ public class SplineKnotAnimate : MonoBehaviour
     public bool Paused = false;
     [HideInInspector] public bool SkipStepCount = false;
 
+    [Header("Current State")]
+    public SplineKnotIndex currentSpace;
+
     [Header("Events")]
     [HideInInspector] public UnityEvent<bool> OnEnterJunction;
     [HideInInspector] public UnityEvent<int> OnJunctionSelection;
@@ -70,7 +73,57 @@ public class SplineKnotAnimate : MonoBehaviour
         }
 
         remainingSteps = stepAmount;
+
+        // Update current space at the start of the turn
+        currentSpace = currentKnot;
+
         StartCoroutine(MoveAlongSpline());
+    }
+
+    public void TeleportToKnot(int splineIndex, int knotIndex)
+    {
+        // Validate spline and knot
+        if (splineIndex < 0 || splineIndex >= splineContainer.Splines.Count)
+        {
+            Debug.LogWarning("Invalid spline index.");
+            return;
+        }
+
+        var spline = splineContainer.Splines[splineIndex];
+
+        if (knotIndex < 0 || knotIndex >= spline.Knots.Count())
+        {
+            Debug.LogWarning("Invalid knot index.");
+            return;
+        }
+
+        currentKnot = new SplineKnotIndex(splineIndex, knotIndex);
+
+        // Reset movement
+        isMoving = false;
+        inJunction = false;
+        Paused = false;
+        remainingSteps = 0;
+        walkableKnots.Clear();
+
+        // Update spline timing
+        currentT = spline.ConvertIndexUnit(knotIndex, PathIndexUnit.Knot, PathIndexUnit.Normalized);
+        nextKnot = new SplineKnotIndex(splineIndex, (knotIndex + 1) % spline.Knots.Count());
+
+        // Position the object at the knot
+        Vector3 worldPos = (Vector3)spline.EvaluatePosition(currentT) + splineContainer.transform.position;
+        transform.position = worldPos;
+
+        // Update rotation
+        spline.Evaluate(currentT, out float3 pos, out float3 dir, out float3 up);
+        Vector3 worldDirection = splineContainer.transform.TransformDirection(dir);
+        if (worldDirection.sqrMagnitude > 0.001f)
+            transform.rotation = Quaternion.LookRotation(worldDirection, Vector3.up);
+
+        // Update the current space variable if you added it
+        currentSpace = currentKnot;
+
+        Debug.Log($"Teleported to Spline {splineIndex}, Knot {knotIndex}");
     }
 
     IEnumerator MoveAlongSpline()
@@ -154,6 +207,8 @@ public class SplineKnotAnimate : MonoBehaviour
                 isMoving = false;
                 OnKnotLand.Invoke(currentKnot);
 
+
+                currentSpace = currentKnot;
                 Debug.Log($"Stopped at Spline {currentKnot.Spline}, Knot {currentKnot.Knot}");
             }
         }

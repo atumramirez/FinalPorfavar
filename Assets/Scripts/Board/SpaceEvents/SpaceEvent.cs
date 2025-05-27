@@ -7,4 +7,9 @@ public class SpaceEvent : MonoBehaviour
     {
 
     }
+
+    virtual public void Trap(SplineKnotAnimate animator)
+    {
+        Debug.Log("Olá");
+    }
 }

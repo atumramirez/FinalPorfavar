@@ -12,7 +12,7 @@ public class ShopUI : MonoBehaviour
     [SerializeField] private TMP_Text descriptionText;
     [SerializeField] private Button buyButton;
     [SerializeField] private Button leaveShopButton;
-    [SerializeField] private List<Button> itemButtons; // 3 Buttons with Image component for icons
+    [SerializeField] private List<Button> itemButtons; 
 
     [Header("Items")]
     [SerializeField] private List<Item> allAvailableItems;
@@ -27,27 +27,9 @@ public class ShopUI : MonoBehaviour
     {
         currentBuyer = player;
         onShopClosed = onCloseCallback;
-        gameObject.SetActive(true);
 
         SetupShopItems();
-        UpdateUI(-1); // No item selected at start
-
-        leaveShopButton.onClick.RemoveAllListeners();
-        leaveShopButton.onClick.AddListener(CloseShop);
-
-        buyButton.onClick.RemoveAllListeners();
-        buyButton.onClick.AddListener(() =>
-        {
-            if (selectedIndex >= 0 && selectedIndex < currentShopItems.Count)
-            {
-                Item selectedItem = currentShopItems[selectedIndex];
-                if (currentBuyer.TryBuyItem(selectedItem))
-                {
-                    Debug.Log("Bought: " + selectedItem.itemName);
-                    CloseShop();
-                }
-            }
-        });
+        UpdateUI(-1);
     }
 
     private void SetupShopItems()
@@ -97,7 +79,5 @@ public class ShopUI : MonoBehaviour
     public void CloseShop()
     {
         gameObject.SetActive(false);
-        onShopClosed?.Invoke(); // Resume movement
-        Destroy(gameObject);
     }
 }

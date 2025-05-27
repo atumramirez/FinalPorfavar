@@ -44,13 +44,11 @@ public class ServerPlayerController : MonoBehaviour
         }
     }
 
-
     public void ConfirmTurn()
     {
         if (!IsMyTurn()) return;
 
         isReady = true;
-        Debug.Log("CONFIRMOU TURNO");
     }
 
     public void RollDice()
@@ -58,7 +56,7 @@ public class ServerPlayerController : MonoBehaviour
         if (!IsMyTurn()) return;
 
         asRolled = true;
-        int randomNumber = Random.Range(1, 7);
+        int randomNumber = 1;
         Debug.Log($"Player {index} rolled: {randomNumber}");
         splineKnotAnimator.Animate(randomNumber);
     }
@@ -92,9 +90,11 @@ public class ServerPlayerController : MonoBehaviour
             yield return new WaitForSeconds(0.08f);
             data.Land(stats);
             OnMovementStart.Invoke(false);
-            
-            if (IsMyTurn())
+
+            if (data.spaceEvent == null)
+            { 
                 EndTurn();
+            }
 
             yield return new WaitForSeconds(1.5f);
         }
@@ -109,6 +109,7 @@ public class ServerPlayerController : MonoBehaviour
 
     public void ContinueMovement()
     {
+        Debug.Log("Anda");
         splineKnotAnimator.Paused = false;
     }
 

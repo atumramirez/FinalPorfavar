@@ -1,7 +1,7 @@
 using UnityEngine;
 using Unity.Netcode;
 
-public class ShopLogic : NetworkBehaviour
+public class ShopLweaogic : NetworkBehaviour
 {
     [SerializeField] private GameObject ShopPrompt;
     [SerializeField] private GameObject ShopMenu;

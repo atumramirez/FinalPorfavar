@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5116498295537455415}
   - component: {fileID: 8167347433841817917}
   - component: {fileID: 5873178275268487837}
+  - component: {fileID: -6303019479798668708}
   - component: {fileID: 2386689859771500068}
   m_Layer: 0
   m_Name: BoardTile
@@ -111,6 +112,31 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.00000005960465, y: 0, z: -0.00000008940698}
+--- !u!114 &-6303019479798668708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306393644908063418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 629756343
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &2386689859771500068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,13 +149,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2386fbeddd87f4c61b936e19c3d668e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   knotIndex:
     Spline: 0
     Knot: 0
   OnLand:
     m_PersistentCalls:
       m_Calls: []
+  spaceType: 0
   coinGain: 3
+  TrapMenu: {fileID: 0}
+  hasTrap: 0
+  trapOwner: {fileID: 0}
+  trapCost: 5
+  rewardCoins: 3
+  damage: 2
   pauseMovement: 0
   skipStepCount: 0
-  spaceEvent: {fileID: 0}

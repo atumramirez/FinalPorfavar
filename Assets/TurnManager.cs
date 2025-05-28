@@ -4,13 +4,13 @@ using UnityEngine.Events;
 
 public class TurnManager : MonoBehaviour
 {
-    public List<ServerPlayerController> players = new List<ServerPlayerController>();
+    public List<PlayerController> players = new List<PlayerController>();
     public int currentPlayerIndex { get; private set; } = 0;
     public int currentRound { get; private set; } = 0;
 
     public CameraFollow cameraFollow;
 
-    public ServerPlayerController CurrentPlayer => players[currentPlayerIndex];
+    public PlayerController CurrentPlayer => players[currentPlayerIndex];
 
     public UnityEvent<int> OnTurnStart; 
     public UnityEvent<int> OnRoundStart; 

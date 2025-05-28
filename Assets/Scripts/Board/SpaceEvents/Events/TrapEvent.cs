@@ -5,23 +5,17 @@ public class TrapSpace : SpaceEvent
 {
     [SerializeField] TrapLogic TrapLogic;
 
+    [Header("Trap")]
     public bool hasTrap = false;
-    public ServerPlayerController trapOwner;
+    public PlayerController trapOwner;
     public int trapCost = 5;
     public int rewardCoins = 3;
     public int damage = 2;
 
-    [SerializeField] private GameObject CurrentSpace;
-
-
-    [Header("Prompt")]
-    [SerializeField] private ServerUIManager uIManager;
-
-
     public override void StartEvent(SplineKnotAnimate animator)
     {
-        
-        if (!animator.TryGetComponent<ServerPlayerController>(out var currentPlayer))
+        Debug.Log("Evento Com´çado");
+        if (!animator.TryGetComponent<PlayerController>(out var currentPlayer))
         {
             animator.Paused = false;
             return;
@@ -29,6 +23,7 @@ public class TrapSpace : SpaceEvent
 
         if (!hasTrap)
         {
+            Debug.Log("TentaSeila");
             TryPlaceTrap(currentPlayer);
         }
         else 
@@ -46,12 +41,13 @@ public class TrapSpace : SpaceEvent
         }
     }
 
-    public void TryPlaceTrap(ServerPlayerController player)
+    public void TryPlaceTrap(PlayerController player)
     {
         PlayerStats stats = player.GetComponent<PlayerStats>();
 
         if (stats.Coins >= trapCost)
         {
+            TrapLogic.OpenClient();
         }
         else
         {
@@ -59,11 +55,13 @@ public class TrapSpace : SpaceEvent
         }
     }
 
-    public void PlaceTrap(ServerPlayerController player)
+    public void PlaceTrap(PlayerController player)
     {
+        Debug.Log("Trap loca");
         PlayerStats stats = player.GetComponent<PlayerStats>();
         stats.RemoveCoins(trapCost);
         hasTrap = true;
         trapOwner = player;
+        player.EndTurn();
     }
 }

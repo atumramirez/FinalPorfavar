@@ -4,7 +4,6 @@ using TMPro;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 
 public class ShopUI : MonoBehaviour
 {
@@ -12,7 +11,9 @@ public class ShopUI : MonoBehaviour
     [SerializeField] private TMP_Text descriptionText;
     [SerializeField] private Button buyButton;
     [SerializeField] private Button leaveShopButton;
-    [SerializeField] private List<Button> itemButtons; 
+    [SerializeField] private List<Button> itemButtons;
+
+    [SerializeField] private GameObject Menu;
 
     [Header("Items")]
     [SerializeField] private List<Item> allAvailableItems;
@@ -23,10 +24,10 @@ public class ShopUI : MonoBehaviour
 
     private int selectedIndex = -1;
 
-    public void OpenShop(PlayerStats player, Action onCloseCallback)
+    public void OpenShop(PlayerStats player)
     {
+        Menu.SetActive(true);
         currentBuyer = player;
-        onShopClosed = onCloseCallback;
 
         SetupShopItems();
         UpdateUI(-1);
@@ -67,7 +68,9 @@ public class ShopUI : MonoBehaviour
             Item item = currentShopItems[selected];
             descriptionText.text = $"{item.itemName}\n\n{item.description}\n\nPrice: {item.price} coins";
 
-            buyButton.interactable = currentBuyer.Coins >= item.price;
+            // Enable Buy if player has enough coins and inventory space
+            bool canBuy = currentBuyer.Coins >= item.price && currentBuyer.HasInventorySpace();
+            buyButton.interactable = canBuy;
         }
         else
         {
@@ -76,8 +79,27 @@ public class ShopUI : MonoBehaviour
         }
     }
 
+    private void OnBuyButtonPressed()
+    {
+        if (selectedIndex >= 0 && selectedIndex < currentShopItems.Count)
+        {
+            Item selectedItem = currentShopItems[selectedIndex];
+
+            if (currentBuyer.TryBuyItem(selectedItem))
+            {
+                descriptionText.text = $"You bought {selectedItem.itemName}!";
+                buyButton.interactable = false;
+            }
+            else
+            {
+                descriptionText.text = $"Not enough coins or inventory full for {selectedItem.itemName}.";
+            }
+        }
+    }
+
     public void CloseShop()
     {
         gameObject.SetActive(false);
+        onShopClosed?.Invoke();
     }
 }

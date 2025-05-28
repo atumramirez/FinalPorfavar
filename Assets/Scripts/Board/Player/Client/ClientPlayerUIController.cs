@@ -46,7 +46,7 @@ public class ClientPlayerUIController : NetworkBehaviour
         string playerTag = $"Jogador{clientId}";
 
         GameObject playerObj = GameObject.Find(playerTag);
-        if (playerObj != null && playerObj.TryGetComponent(out ServerPlayerController controller))
+        if (playerObj != null && playerObj.TryGetComponent(out PlayerController controller))
         {
             controller.ConfirmTurn();
         }
@@ -60,7 +60,7 @@ public class ClientPlayerUIController : NetworkBehaviour
         string playerTag = $"Jogador{clientId}";
 
         GameObject playerObj = GameObject.Find(playerTag);
-        if (playerObj != null && playerObj.TryGetComponent(out ServerPlayerController controller))
+        if (playerObj != null && playerObj.TryGetComponent(out PlayerController controller))
         {
             controller.RollDice();
         }
@@ -75,7 +75,7 @@ public class ClientPlayerUIController : NetworkBehaviour
 
         GameObject playerObj = GameObject.Find(playerTag);
         Debug.Log("Procurar objeto.");
-        if (playerObj != null && playerObj.TryGetComponent(out ServerPlayerController controller))
+        if (playerObj != null && playerObj.TryGetComponent(out PlayerController controller))
         {
             Debug.Log("Objeto encontrado.");
             controller.ChangeJunction(direction);
@@ -91,7 +91,7 @@ public class ClientPlayerUIController : NetworkBehaviour
 
         GameObject playerObj = GameObject.Find(playerTag);
         Debug.Log("Procurar objeto.");
-        if (playerObj != null && playerObj.TryGetComponent(out ServerPlayerController controller))
+        if (playerObj != null && playerObj.TryGetComponent(out PlayerController controller))
         {
             Debug.Log("Objeto encontrado.");
             controller.ConfirmJuction();
@@ -107,11 +107,10 @@ public class ClientPlayerUIController : NetworkBehaviour
 
         GameObject playerObj = GameObject.Find(playerTag);
         Debug.Log("Procurar objeto.");
-        if (playerObj != null && playerObj.TryGetComponent(out ServerPlayerController controller))
+        if (playerObj != null && playerObj.TryGetComponent(out PlayerController controller))
         {
             Debug.Log("Objeto encontrado.");
             controller.ContinueMovement();
-            serverUIManager.HideShopPromptUI();
         }
     }
 

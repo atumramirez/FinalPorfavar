@@ -13,7 +13,7 @@ public class SplineKnotAnimate : MonoBehaviour
     [SerializeField] private float moveSpeed = 10;
     [SerializeField] private float movementLerp = 10;
     [SerializeField] private float rotationLerp = 10;
-    private int remainingSteps;
+    public int remainingSteps;
     public int Step => remainingSteps;
 
     [Header("Knot Logic")]
@@ -74,10 +74,24 @@ public class SplineKnotAnimate : MonoBehaviour
 
         remainingSteps = stepAmount;
 
-        // Update current space at the start of the turn
         currentSpace = currentKnot;
 
         StartCoroutine(MoveAlongSpline());
+    }
+
+    public void MoveBackward(int stepAmount = 1)
+    {
+        if (isMoving)
+        {
+            Debug.Log("Already animating");
+            return;
+        }
+
+        remainingSteps = stepAmount;
+
+        currentSpace = currentKnot;
+
+        StartCoroutine(MoveBackwardAlongSpline());
     }
 
     public void TeleportToKnot(int splineIndex, int knotIndex)
@@ -214,6 +228,78 @@ public class SplineKnotAnimate : MonoBehaviour
         }
     }
 
+    IEnumerator MoveBackwardAlongSpline()
+    {
+        if (inJunction)
+        {
+            yield return new WaitUntil(() => inJunction == false);
+            OnEnterJunction.Invoke(false);
+            SelectJunctionPath(junctionIndex);
+        }
+
+        if (Paused)
+            yield return new WaitUntil(() => Paused == false);
+
+        isMoving = true;
+
+        Spline spline = splineContainer.Splines[currentKnot.Spline];
+        int prevKnotIndex = (currentKnot.Knot - 1 + spline.Knots.Count()) % spline.Knots.Count();
+        nextKnot = new SplineKnotIndex(currentKnot.Spline, prevKnotIndex);
+
+        currentT = spline.ConvertIndexUnit(currentKnot.Knot, PathIndexUnit.Knot, PathIndexUnit.Normalized);
+        float nextT = spline.ConvertIndexUnit(nextKnot.Knot, PathIndexUnit.Knot, PathIndexUnit.Normalized);
+
+        OnDestinationKnot.Invoke(nextKnot);
+
+        while (currentT != nextT)
+        {
+            currentT = Mathf.MoveTowards(currentT, nextT, AdjustedMovementSpeed(spline) * Time.deltaTime);
+            yield return null;
+        }
+
+        if (currentT <= nextT || Mathf.Approximately(currentT, nextT))
+        {
+            currentKnot = nextKnot;
+            int newPrevKnotIndex = (currentKnot.Knot - 1 + spline.Knots.Count()) % spline.Knots.Count();
+            nextKnot = new SplineKnotIndex(currentKnot.Spline, newPrevKnotIndex);
+
+            if (nextT == 0 && spline.Closed)
+                currentT = 1;
+
+            connectedKnots = splineContainer.KnotLinkCollection.TryGetKnotLinks(currentKnot, out var links) ? links : null;
+
+            if (IsJunctionKnot(currentKnot))
+            {
+                inJunction = true;
+                junctionIndex = 0;
+                isMoving = false;
+                OnEnterJunction.Invoke(true);
+                OnJunctionSelection.Invoke(junctionIndex);
+            }
+            else
+            {
+                if (!SkipStepCount)
+                    remainingSteps--;
+                else
+                    SkipStepCount = false;
+            }
+
+            OnKnotEnter.Invoke(currentKnot);
+
+            if (remainingSteps > 0)
+            {
+                StartCoroutine(MoveBackwardAlongSpline());
+            }
+            else
+            {
+                isMoving = false;
+                OnKnotLand.Invoke(currentKnot);
+                currentSpace = currentKnot;
+                Debug.Log($"Stopped at Spline {currentKnot.Spline}, Knot {currentKnot.Knot}");
+            }
+        }
+    }
+
     void MoveAndRotate()
     {
         float movementBlend = Mathf.Pow(0.5f, Time.deltaTime * movementLerp);
@@ -300,12 +386,16 @@ public class SplineKnotAnimate : MonoBehaviour
         return knotIndex.Knot >= spline.Knots.ToArray().Length - 1 && !splineContainer.Splines[knotIndex.Spline].Closed;
     }
 
+    bool IsFirstKnot(SplineKnotIndex knotIndex)
+    {
+        return knotIndex.Knot == 0 && !splineContainer.Splines[knotIndex.Spline].Closed;
+    }
+
     float AdjustedMovementSpeed(Spline spline)
     {
 
         float splineLength = spline.GetLength();
 
-        // Adjust speed relative to spline length
         return moveSpeed / splineLength;
     }
 

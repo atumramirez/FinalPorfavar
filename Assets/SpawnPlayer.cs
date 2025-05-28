@@ -22,14 +22,14 @@ public class PlayerSpawner : MonoBehaviour
             GameObject playerObj = Instantiate(playerPrefab, parentTransform);
             playerObj.name = $"Jogador{i + 1}";
 
-            ServerPlayerController playerController = playerObj.GetComponent<ServerPlayerController>();
+            PlayerController playerController = playerObj.GetComponent<PlayerController>();
             if (playerController != null)
             {
                 turnManager.players.Add(playerController);
             }
             else
             {
-                Debug.LogError($"Player prefab is missing ServerPlayerController component.");
+                Debug.LogError($"Player prefab is missing PlayerController component.");
             }
         }
     }

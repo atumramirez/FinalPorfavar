@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class PlayerStats : MonoBehaviour
 {
+    [SerializeField] private PlayerStatsServerUI PlayerStatsServerUI;
+
     [SerializeField] private int coins;
     public int Coins => coins;
     [SerializeField] private int stars;
@@ -29,6 +31,7 @@ public class PlayerStats : MonoBehaviour
         coinsBeforeChange = coins;
         coins += amount;
         coins = Mathf.Clamp(coins, 0, 999);
+        PlayerStatsServerUI.UpdatePointPoints(coins);
     }
 
     public void RemoveCoins(int amount)
@@ -77,5 +80,10 @@ public class PlayerStats : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public void GetItem(Item item)
+    {
+        inventory.Add(item);
     }
 }

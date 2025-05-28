@@ -1,14 +1,13 @@
-using UnityEngine;
 using Unity.Netcode;
+using UnityEngine;
 
-public class TrapLogic : NetworkBehaviour
+public class WallLogic : NetworkBehaviour
 {
-    [SerializeField] private GameObject TrapMenu;
+    [SerializeField] private GameObject WallMenu;
 
-    public void OpenClient()
+    public void OpenMenu()
     {
-        Debug.Log("Ola");
-        OpenClientRpc();
+        OpenMenuClientRpc();
     }
 
     public void OnConfirm()
@@ -16,7 +15,7 @@ public class TrapLogic : NetworkBehaviour
         OnConfirmServerRpc();
     }
 
-    public void OnCancel()
+    public void onDeny()
     {
         
     }
@@ -27,21 +26,20 @@ public class TrapLogic : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void OpenClientRpc()
+    private void OpenMenuClientRpc()
     {
-        TrapMenu.SetActive(true);
+        WallMenu.SetActive(true);
     }
 
     [ClientRpc]
     private void HideMenuClientRpc()
     {
-        TrapMenu.SetActive(false);
+        WallMenu.SetActive(false);
     }
 
     [ServerRpc(RequireOwnership = false)]
     private void OnConfirmServerRpc(ServerRpcParams rpcParams = default)
     {
-        Debug.Log("On confirm");
         ulong clientId = rpcParams.Receive.SenderClientId;
 
         string playerTag = $"Jogador{clientId}";
@@ -49,7 +47,8 @@ public class TrapLogic : NetworkBehaviour
         GameObject playerObj = GameObject.Find(playerTag);
         if (playerObj != null && playerObj.TryGetComponent(out PlayerController controller))
         {
-            controller.BuyTrap();
+            controller.PayWall();
+            HideMenuClientRpc();
         }
     }
 }

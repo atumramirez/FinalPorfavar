@@ -7,20 +7,14 @@ public class StationLogic : NetworkBehaviour
 {
     [SerializeField] private GameObject StationMenu;
 
-    private int currentKnotIndex;
-    private int currentSplineIndex;
-    private SplineKnotAnimate currentAnimator;
-
-    public void OpenMenu(int splineIndex, int knotIndex)
+    public void OpenMenu()
     {
-        SaveValues(splineIndex, knotIndex);
-
-        OpenMenuClientRpc(splineIndex, knotIndex);
+        OpenMenuClientRpc();
     }
 
     public void OnConfirm()
     {
-        OnConfirmServerRpc(currentSplineIndex, currentKnotIndex);
+        OnConfirmServerRpc();
     }
 
     public void OnCancel()
@@ -28,21 +22,14 @@ public class StationLogic : NetworkBehaviour
 
     }
 
-    public void SaveValues(int spline, int knot)
-    {
-        currentSplineIndex = spline;
-        currentKnotIndex = knot;
-    }
-
     [ClientRpc]
-    private void OpenMenuClientRpc(int splineIndex, int knotIndex)
+    private void OpenMenuClientRpc()
     {
-        SaveValues(splineIndex, knotIndex);
         StationMenu.SetActive(true);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void OnConfirmServerRpc(int splineIndex, int knotIndex, ServerRpcParams rpcParams = default)
+    private void OnConfirmServerRpc(ServerRpcParams rpcParams = default)
     {
         ulong clientId = rpcParams.Receive.SenderClientId;
 
@@ -50,29 +37,9 @@ public class StationLogic : NetworkBehaviour
 
         GameObject playerObj = GameObject.Find(playerTag);
         Debug.Log("Procurar objeto.");
-        if (playerObj != null && playerObj.TryGetComponent(out SplineKnotAnimate controller))
+        if (playerObj != null && playerObj.TryGetComponent(out PlayerController controller))
         {
-            controller.TeleportToKnot(splineIndex, knotIndex);
-        }
-
-        if (playerObj != null && playerObj.TryGetComponent(out ServerPlayerController playerController))
-        {
-            playerController.EndTurn();
-        }
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void OnCancelServerRpc(ServerRpcParams rpcParams = default)
-    {
-        ulong clientId = rpcParams.Receive.SenderClientId;
-
-        string playerTag = $"Jogador{clientId}";
-
-        GameObject playerObj = GameObject.Find(playerTag);
-        Debug.Log("Procurar objeto.");
-        if (playerObj != null && playerObj.TryGetComponent(out ServerPlayerController playerController))
-        {
-            playerController.EndTurn();
+            controller.Teleport();
         }
     }
 }

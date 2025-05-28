@@ -3,19 +3,24 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Splines;
 
-public class ServerPlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [SerializeField] private PlayerStats stats;
     [SerializeField] private SplineKnotAnimate splineKnotAnimator;
     [SerializeField] private ServerUIManager serverUIManager;
     [SerializeField] private TurnManager turnManager;
 
+
     private SplineKnotInstantiate splineKnotData;
     private int index = 0;
     private int currentClient = 1;
 
+
+    private SplineKnotData currentSpace;
     public bool isReady = false;
     public bool asRolled = false;
+    public bool asUsedItem = false;
+    public Item usedItem = null;
 
     [Header("Events")]
     [HideInInspector] public UnityEvent OnRollStart;
@@ -57,8 +62,29 @@ public class ServerPlayerController : MonoBehaviour
 
         asRolled = true;
         int randomNumber = 1;
-        Debug.Log($"Player {index} rolled: {randomNumber}");
-        splineKnotAnimator.Animate(randomNumber);
+
+        int finalRoll = randomNumber;
+
+        if (asUsedItem)
+        {
+            switch (usedItem.Id)
+            {
+                case 0:
+                    finalRoll += 3;
+                    Debug.Log($"Player {index} rolled: {randomNumber} + 3");
+                    break;
+                case 1:
+                    finalRoll *= 2;
+                    Debug.Log($"LocoLoco");
+                    break;
+            }
+        }
+        else
+        {
+            Debug.Log($"Player {index} rolled: {randomNumber}");
+        }
+
+        splineKnotAnimator.Animate(finalRoll);
     }
 
     public void ChangeJunction(int direction)
@@ -83,16 +109,17 @@ public class ServerPlayerController : MonoBehaviour
     private void OnKnotLand(SplineKnotIndex index)
     {
         var data = splineKnotData.splineDatas[index.Spline].knots[index.Knot];
+        currentSpace = data;
 
         StartCoroutine(DelayCoroutine());
         IEnumerator DelayCoroutine()
         {
             yield return new WaitForSeconds(0.08f);
-            data.Land(stats);
+            data.Land(splineKnotAnimator, stats);
             OnMovementStart.Invoke(false);
-
+            
             if (data.spaceEvent == null)
-            { 
+            {
                 EndTurn();
             }
 
@@ -103,8 +130,31 @@ public class ServerPlayerController : MonoBehaviour
     private void OnKnotEnter(SplineKnotIndex index)
     {
         var data = splineKnotData.splineDatas[index.Spline].knots[index.Knot];
+        currentSpace = data;
         data.EnterKnot(splineKnotAnimator, stats);
         OnMovementUpdate.Invoke(splineKnotAnimator.Step);
+    }
+
+    /// <summary>
+    /// EVENTOS:
+    /// </summary>
+    public void BuyTrap()
+    {
+        Debug.Log("Quase comprada");
+        currentSpace.TryGetComponent(out TrapSpace trapSpaceData);
+        trapSpaceData.PlaceTrap(this);
+    }
+
+    public void PayWall()
+    {
+        currentSpace.TryGetComponent(out WallSpace wallSpaceData);
+        wallSpaceData.PayCrazy(this);
+    }
+
+    public void Teleport()
+    {
+        currentSpace.TryGetComponent(out StationSpace stationSpaceData);
+        splineKnotAnimator.TeleportToKnot(stationSpaceData.splineIndex, stationSpaceData.knotIndex);
     }
 
     public void ContinueMovement()

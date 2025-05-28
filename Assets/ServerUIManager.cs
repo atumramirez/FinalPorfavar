@@ -80,15 +80,6 @@ public class ServerUIManager : NetworkBehaviour
         HideAllButtonsClientRpc(clientRpcParams);
     }
 
-    public void ShowShopPromptUI()
-    {
-        ShowShopPromptUIClientRpc();
-    }
-    public void HideShopPromptUI()
-    {
-        HideShopPromptUIClientRpc();
-    }
-
     /// <summary>
     /// 
     /// </summary>
@@ -127,21 +118,4 @@ public class ServerUIManager : NetworkBehaviour
         ClientMenu.SetActive(false);
         JunctionMenu.SetActive(false);
     }
-
-    [ClientRpc]
-    private void ShowShopPromptUIClientRpc(ClientRpcParams clientRpcParams = default)
-    {
-        ReadyMenu.SetActive(false);
-        ClientMenu.SetActive(false);
-        JunctionMenu.SetActive(false);
-        ShopPromptMenu.SetActive(true);
-    }
-
-    [ClientRpc]
-    private void HideShopPromptUIClientRpc()
-    {
-        ShopPromptMenu.SetActive(false);
-    }
-
-
 }

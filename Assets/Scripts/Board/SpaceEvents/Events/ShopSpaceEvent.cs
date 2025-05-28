@@ -1,20 +1,16 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Shop Space Event", menuName = "BoardGame/SpaceEvents/Shop")]
-public class ShopSpaceEvent : SpaceEvent
+public class ShopSpace : SpaceEvent
 {
-    [SerializeField] private ServerUIManager serverUIManager;
-
+    [SerializeField] private ShopLogic shopLogic;
     public override void StartEvent(SplineKnotAnimate animator)
     {
-        PlayerStats player = animator.GetComponent<PlayerStats>();
-
-        if (player == null)
+        if (!animator.TryGetComponent<PlayerStats>(out var player))
         {
             animator.Paused = false;
             return;
         }
 
-        serverUIManager.ShowShopPromptUI();
+        shopLogic.OpenPromptMenu();
     }
 }

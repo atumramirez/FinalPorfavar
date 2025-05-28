@@ -1,13 +1,11 @@
 using UnityEngine;
 using UnityEngine.Splines;
-using Unity.Netcode;
 
-[CreateAssetMenu(fileName = "New Station Space Event", menuName = "BoardGame/SpaceEvents/Station")]
-public class StationEvent : SpaceEvent
+public class StationSpace : SpaceEvent
 {
     [SerializeField] private StationLogic StationLogic;
-    [SerializeField] private int SplineIndex;
-    [SerializeField] private int KnotIndex;
+    public int splineIndex;
+    public int knotIndex;
 
     public override void StartEvent(SplineKnotAnimate animator)
     {
@@ -19,6 +17,6 @@ public class StationEvent : SpaceEvent
             return;
         }
 
-        StationLogic.OpenMenu(SplineIndex, KnotIndex);
+        StationLogic.OpenMenu();
     }
 }

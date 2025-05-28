@@ -1,11 +1,14 @@
 using UnityEngine;
+using Unity.Netcode;
 
-public class ClientController : MonoBehaviour
+public class ClientController : NetworkBehaviour
 {
     [SerializeField] private GameObject PlayerMenu;
     [SerializeField] private GameObject RollMenu;
     [SerializeField] private GameObject ItemMenu;
     [SerializeField] private GameObject MapMenu;
+
+    [SerializeField] private ItemLogic itemLogic;
 
     [Header("Shop")]
     [SerializeField] private GameObject ShopMenu;
@@ -21,10 +24,12 @@ public class ClientController : MonoBehaviour
 
     public void PressItem()
     {
+        Debug.Log("Item Pressed");
         PlayerMenu.SetActive(false);
         RollMenu.SetActive(false);
-        ItemMenu.SetActive(true);
         MapMenu.SetActive(false);
+
+        GetIdsServerRpc();
     }
 
     public void PressMap()
@@ -51,4 +56,34 @@ public class ClientController : MonoBehaviour
         MapMenu.SetActive(false);
         ShopMenu.SetActive(true);
     }
+
+    [ClientRpc]
+    private void OpenMenuClientRpc(int[] ids)
+    {
+        Debug.Log("Menu Almost Opened");
+        itemLogic.OpenMenu(ids);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void GetIdsServerRpc(ServerRpcParams rpcParams = default)
+    {
+        ulong clientId = rpcParams.Receive.SenderClientId;
+
+        string playerTag = $"Jogador{clientId}";
+
+        GameObject playerObj = GameObject.Find(playerTag);
+        Debug.Log("Procurar objeto.");
+
+        if (playerObj != null && playerObj.TryGetComponent(out PlayerStats stats))
+        {
+            int[] ids = new int[stats.inventory.Count];
+            for (int i = 0; i < stats.inventory.Count; i++)
+            {
+                ids[i] = stats.inventory[i].Id;
+            }
+
+            OpenMenuClientRpc(ids);
+        }
+    }
+
 }

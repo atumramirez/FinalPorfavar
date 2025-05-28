@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     public bool isReady = false;
     public bool asRolled = false;
     public bool asUsedItem = false;
-    public Item usedItem = null;
+    public int usedItemId;
 
     [Header("Events")]
     [HideInInspector] public UnityEvent OnRollStart;
@@ -54,6 +54,7 @@ public class PlayerController : MonoBehaviour
         if (!IsMyTurn()) return;
 
         isReady = true;
+        asUsedItem = false;
     }
 
     public void RollDice()
@@ -65,9 +66,10 @@ public class PlayerController : MonoBehaviour
 
         int finalRoll = randomNumber;
 
+
         if (asUsedItem)
         {
-            switch (usedItem.Id)
+            switch (usedItemId)
             {
                 case 0:
                     finalRoll += 3;

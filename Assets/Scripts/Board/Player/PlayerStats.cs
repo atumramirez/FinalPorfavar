@@ -17,6 +17,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private int maxItems = 3;
 
 
+
     [HideInInspector] public UnityEvent OnInitialize;
     [HideInInspector] public UnityEvent<int> OnAnimation;
 

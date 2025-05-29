@@ -9,7 +9,9 @@ public class SwipeToRoll : MonoBehaviour
     private Vector2 touchEndPos;
 
     [Header("Swipe Settings")]
-    public float minSwipeDistance = 100f; 
+    public float minSwipeDistance = 100f;
+
+    [SerializeField] private Animator diceAnimator;
 
     void Update()
     {
@@ -62,7 +64,8 @@ public class SwipeToRoll : MonoBehaviour
 
         if (verticalMove > minSwipeDistance && verticalMove > horizontalMove)
         {
-            clientPlayerUIController.RollDice();
+            diceAnimator.SetTrigger("Throw");
+            //clientPlayerUIController.RollDice();
         }
     }
 

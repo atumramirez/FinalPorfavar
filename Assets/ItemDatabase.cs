@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class ItemDatabase : MonoBehaviour
 {
-    public List<Item> items; // List of all Item ScriptableObjects
+    public List<Item> items; 
     public Item GetItemById(int id)
     {
         foreach (Item item in items)

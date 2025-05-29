@@ -87,4 +87,11 @@ public class PlayerStats : MonoBehaviour
     {
         inventory.Add(item);
     }
+
+    public void RemoveItem(int index)
+    {
+        Debug.Log("Item Removido");
+        inventory.RemoveAt(index); 
+
+    }
 }

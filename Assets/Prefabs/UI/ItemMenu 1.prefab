@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3517820954534858058}
   - component: {fileID: 5670855075640992375}
   m_Layer: 5
-  m_Name: RollButton (2)
+  m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 8197131192428614072}
   - component: {fileID: 2716673609388942241}
   m_Layer: 5
-  m_Name: MapButton
+  m_Name: Item3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -331,7 +331,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Item
+  m_text: Item 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -415,7 +415,7 @@ GameObject:
   - component: {fileID: 5633782423504519312}
   - component: {fileID: 8098058705933957661}
   m_Layer: 5
-  m_Name: RollButton (1)
+  m_Name: Confirm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -548,7 +548,7 @@ GameObject:
   - component: {fileID: 1799250216878543981}
   - component: {fileID: 7333655277795598970}
   m_Layer: 5
-  m_Name: RollButton
+  m_Name: Item2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -696,11 +696,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2639147479542427559}
   - {fileID: 8173705013766219687}
+  - {fileID: 8472145179648941518}
   - {fileID: 5130150235107685060}
   - {fileID: 1693889858532282051}
-  - {fileID: 2639147479542427559}
-  - {fileID: 8472145179648941518}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1049,7 +1049,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Map
+  m_text: 'Item 3
 
 '
   m_isRightToLeft: 0
@@ -1187,7 +1187,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Roll Dice
+  m_text: 'Item 2
 
 '
   m_isRightToLeft: 0
@@ -1273,7 +1273,7 @@ GameObject:
   - component: {fileID: 9020049197021687201}
   - component: {fileID: 1348445970029472596}
   m_Layer: 5
-  m_Name: ItemButton
+  m_Name: Item1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

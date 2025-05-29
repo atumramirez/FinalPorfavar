@@ -8,6 +8,8 @@ public class ClientController : NetworkBehaviour
     [SerializeField] private GameObject ItemMenu;
     [SerializeField] private GameObject MapMenu;
 
+    [SerializeField] private SwipeToRoll swipeToRoll;
+
     [SerializeField] private ItemLogic itemLogic;
 
     [Header("Shop")]
@@ -20,6 +22,7 @@ public class ClientController : NetworkBehaviour
         RollMenu.SetActive(true);
         ItemMenu.SetActive(false);
         MapMenu.SetActive(false);
+        swipeToRoll.Idle();
     }
 
     public void PressItem()

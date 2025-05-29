@@ -159,6 +159,15 @@ public class PlayerController : MonoBehaviour
         splineKnotAnimator.TeleportToKnot(stationSpaceData.splineIndex, stationSpaceData.knotIndex);
     }
 
+    public void UseItem(int index)
+    {
+        asUsedItem = true;
+        usedItemId = stats.inventory[index].Id; 
+        stats.RemoveItem(index);
+        Debug.Log($"Usaste: {stats.inventory[index].Id}");
+    }
+
+
     public void ContinueMovement()
     {
         Debug.Log("Anda");

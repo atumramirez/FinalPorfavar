@@ -1,7 +1,7 @@
-using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ItemLogic : NetworkBehaviour
 {
@@ -23,6 +23,7 @@ public class ItemLogic : NetworkBehaviour
             if (i < itemIds.Length)
             {
                 itemButtons[i].interactable = true;
+                itemButtons[i].GetComponentInChildren<Text>().text = itemDatabase.GetItemName(i);
 
                 int index = i;
                 itemButtons[i].onClick.RemoveAllListeners();
@@ -31,6 +32,7 @@ public class ItemLogic : NetworkBehaviour
             else
             {
                 itemButtons[i].interactable = false;
+                itemButtons[i].GetComponentInChildren<Text>().text = "Empty";
                 itemButtons[i].onClick.RemoveAllListeners();
             }
         }
@@ -71,11 +73,7 @@ public class ItemLogic : NetworkBehaviour
         if (playerObj != null && playerObj.TryGetComponent(out PlayerController controller))
         {
             Debug.Log("Usaste Item");
-            if (playerObj.TryGetComponent(out PlayerStats stats))
-            {
-                controller.asUsedItem = true;
-                controller.usedItemId = stats.inventory[SelectedIndex].Id;
-            }
+            controller.UseItem(SelectedIndex);
         }
     }
 

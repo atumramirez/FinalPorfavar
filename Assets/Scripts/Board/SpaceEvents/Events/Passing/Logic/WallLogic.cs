@@ -15,9 +15,9 @@ public class WallLogic : NetworkBehaviour
         OnConfirmServerRpc();
     }
 
-    public void onDeny()
+    public void OnDeny()
     {
-        
+        OnDenyServerRpc();
     }
 
     public void HideMenu()
@@ -48,6 +48,22 @@ public class WallLogic : NetworkBehaviour
         if (playerObj != null && playerObj.TryGetComponent(out PlayerController controller))
         {
             controller.PayWall();
+            HideMenuClientRpc();
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void OnDenyServerRpc(ServerRpcParams rpcParams = default)
+    {
+        ulong clientId = rpcParams.Receive.SenderClientId;
+
+        string playerTag = $"Jogador{clientId}";
+
+        GameObject playerObj = GameObject.Find(playerTag);
+        if (playerObj != null && playerObj.TryGetComponent(out PlayerController controller))
+        {
+            controller.ContinueMovement();
+            controller.GoBackwards();
             HideMenuClientRpc();
         }
     }

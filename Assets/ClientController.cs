@@ -1,28 +1,23 @@
 using UnityEngine;
 using Unity.Netcode;
+using System.Security.Cryptography.X509Certificates;
 
 public class ClientController : NetworkBehaviour
 {
     [SerializeField] private GameObject PlayerMenu;
     [SerializeField] private GameObject RollMenu;
     [SerializeField] private GameObject ItemMenu;
-    [SerializeField] private GameObject MapMenu;
 
-    [SerializeField] private SwipeToRoll swipeToRoll;
 
     [SerializeField] private ItemLogic itemLogic;
 
-    [Header("Shop")]
-    [SerializeField] private GameObject ShopMenu;
-
+    [SerializeField] private TurnManager TurnManager;
 
     public void PressRoll()
     {
         PlayerMenu.SetActive(false);
         RollMenu.SetActive(true);
         ItemMenu.SetActive(false);
-        MapMenu.SetActive(false);
-        swipeToRoll.Idle();
     }
 
     public void PressItem()
@@ -30,17 +25,8 @@ public class ClientController : NetworkBehaviour
         Debug.Log("Item Pressed");
         PlayerMenu.SetActive(false);
         RollMenu.SetActive(false);
-        MapMenu.SetActive(false);
 
         GetIdsServerRpc();
-    }
-
-    public void PressMap()
-    {
-        PlayerMenu.SetActive(false);
-        RollMenu.SetActive(false);
-        ItemMenu.SetActive(false);
-        MapMenu.SetActive(true);
     }
 
     public void PressBack()
@@ -48,20 +34,30 @@ public class ClientController : NetworkBehaviour
         PlayerMenu.SetActive(true);
         RollMenu.SetActive(false);
         ItemMenu.SetActive(false);
-        MapMenu.SetActive(false);
     }
 
     public void OpenMenu()
     {
-        PlayerMenu.SetActive(false);
+        PlayerMenu.SetActive(true);
         RollMenu.SetActive(false);
         ItemMenu.SetActive(false);
-        MapMenu.SetActive(false);
-        ShopMenu.SetActive(true);
+    }
+
+    public void OpenClientMenu(int[] ids)
+    {
+        var clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new[] { (ulong)TurnManager.currentPlayer }
+            }
+        };
+
+        OpenMenuClientRpc(ids, clientRpcParams);
     }
 
     [ClientRpc]
-    private void OpenMenuClientRpc(int[] ids)
+    private void OpenMenuClientRpc(int[] ids, ClientRpcParams clientRpcParams = default)
     {
         Debug.Log("Menu Almost Opened");
         itemLogic.OpenMenu(ids);
@@ -84,8 +80,31 @@ public class ClientController : NetworkBehaviour
             {
                 ids[i] = stats.inventory[i].Id;
             }
+            Debug.Log(ids);
+            OpenClientMenu(ids);
+        }
+    }
 
-            OpenMenuClientRpc(ids);
+    [ServerRpc(RequireOwnership = false)]
+    private void HasItemServerRpc(ServerRpcParams rpcParams = default)
+    {
+        ulong clientId = rpcParams.Receive.SenderClientId;
+
+        string playerTag = $"Jogador{clientId}";
+
+        GameObject playerObj = GameObject.Find(playerTag);
+        Debug.Log("Procurar objeto.");
+
+        bool Bolivia = false;
+
+        if (playerObj != null && playerObj.TryGetComponent(out PlayerController playerController))
+        {
+            playerObj.TryGetComponent(out PlayerStats stats);
+            if (stats.inventory.Count > 0 || !playerController.asUsedItem)
+            {
+                Bolivia = true;
+            }
+
         }
     }
 

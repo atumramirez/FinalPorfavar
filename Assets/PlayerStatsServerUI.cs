@@ -13,17 +13,17 @@ public class PlayerStatsServerUI : MonoBehaviour
 
     public void UpdateHealthPoints(int points)
     {
-        healthPoints.text = "Vida: " + points;
+        healthPoints.text = $"{points}";
     }
 
     public void UpdatePointPoints(int points)
     {
-        pointPoints.text = "Pontos: " + points;
+        pointPoints.text = $"{points}";
     }
 
     public void UpdateHealthAndPointPoints(int healthPoint, int pointPoint)
     {
-        healthPoints.text = "Vida: " + healthPoint;
-        pointPoints.text = "Pontos: " + pointPoint;
+        healthPoints.text = $"{healthPoint}";
+        pointPoints.text = $"{pointPoint}";
     }
 }

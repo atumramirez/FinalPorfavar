@@ -12,11 +12,18 @@ public class SplineKnotData : NetworkBehaviour
     [SerializeField] private bool pauseMovement = false;
     [SerializeField] public bool skipStepCount = false;
 
-    private enum SpaceType {None, Full, Passing}
+    public enum SpaceType {None, Full, Passing}
     [SerializeField] private SpaceType spaceType = SpaceType.Full;
 
     [Header("Event")]
     [SerializeField] public SpaceEvent spaceEvent;
+
+    private void Start()
+    {
+       spaceEvent = gameObject.GetComponent<SpaceEvent>();
+       pauseMovement = spaceEvent.PauseMovement();
+       skipStepCount = spaceEvent.SkipStepCount();
+    }
 
     public void EnterKnot(SplineKnotAnimate splineKnotAnimator, PlayerStats playerStats)
     {

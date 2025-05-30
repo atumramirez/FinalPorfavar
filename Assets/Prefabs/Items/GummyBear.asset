@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa78de2a9c34db54c86388086c213168, type: 3}
-  m_Name: Trap
+  m_Name: GummyBear
   m_EditorClassIdentifier: 
-  itemName: Trao
+  itemName: Gummy Bear
+  Id: 0
   price: 5
   icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   description: "Coloca uma armadilha num espa\xE7o a tua escolha."

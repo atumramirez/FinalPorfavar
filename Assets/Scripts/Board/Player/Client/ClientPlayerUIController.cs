@@ -11,6 +11,7 @@ public class ClientPlayerUIController : NetworkBehaviour
     public void SetReady()
     {
         SetReadyServerRpc();
+        clientController.OpenMenu();
     }
 
     public void RollDice()
@@ -28,15 +29,6 @@ public class ClientPlayerUIController : NetworkBehaviour
         ConfirmJuctionServerRpc();
     }
 
-    public void ExitShopPrompt()
-    {
-        ExitShopPromptServerRpc();
-    }
-
-    public void ConfirmStation()
-    {
-        
-    }
 
     [ServerRpc(RequireOwnership = false)]
     private void SetReadyServerRpc(ServerRpcParams rpcParams = default)
@@ -95,36 +87,6 @@ public class ClientPlayerUIController : NetworkBehaviour
         {
             Debug.Log("Objeto encontrado.");
             controller.ConfirmJuction();
-        }
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void ExitShopPromptServerRpc(ServerRpcParams rpcParams = default)
-    {
-        ulong clientId = rpcParams.Receive.SenderClientId;
-
-        string playerTag = $"Jogador{clientId}";
-
-        GameObject playerObj = GameObject.Find(playerTag);
-        Debug.Log("Procurar objeto.");
-        if (playerObj != null && playerObj.TryGetComponent(out PlayerController controller))
-        {
-            Debug.Log("Objeto encontrado.");
-            controller.ContinueMovement();
-        }
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void ConfirmStationServerRpc(ServerRpcParams rpcParams = default)
-    {
-        ulong clientId = rpcParams.Receive.SenderClientId;
-
-        string playerTag = $"Jogador{clientId}";
-
-        GameObject playerObj = GameObject.Find(playerTag);
-        Debug.Log("Procurar objeto.");
-        if (playerObj != null && playerObj.TryGetComponent(out SplineKnotAnimate controller))
-        {
         }
     }
 }

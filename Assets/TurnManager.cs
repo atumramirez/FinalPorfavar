@@ -4,11 +4,17 @@ using UnityEngine.Events;
 
 public class TurnManager : MonoBehaviour
 {
-    public List<PlayerController> players = new List<PlayerController>();
+    [SerializeField] private int NumRounds;
+    [SerializeField] private NumberRoundsUI NumberRoundsUI;
+
+    public List<PlayerController> players = new();
     public int currentPlayerIndex { get; private set; } = 0;
+    public int currentPlayer = 0;
     public int currentRound { get; private set; } = 0;
 
     public CameraFollow cameraFollow;
+
+    private int totalRounds = 20;
 
     public PlayerController CurrentPlayer => players[currentPlayerIndex];
 
@@ -25,13 +31,16 @@ public class TurnManager : MonoBehaviour
             return;
         }
 
+        NumberRoundsUI.GetTotalRounds(totalRounds);
         StartRound();
     }
 
     private void StartRound()
     {
         currentRound++;
+        NumberRoundsUI.UpdateText(currentRound);
         currentPlayerIndex = 0;
+        currentPlayer = currentPlayerIndex + 1;
         OnRoundStart?.Invoke(currentRound);
         Debug.Log("Round: " + currentRound);
         StartPlayerTurn();
@@ -61,6 +70,7 @@ public class TurnManager : MonoBehaviour
         turnInProgress = false;
 
         currentPlayerIndex++;
+        currentPlayer = currentPlayerIndex + 1; 
 
         if (currentPlayerIndex >= players.Count)
         {

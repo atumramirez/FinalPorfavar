@@ -5,6 +5,9 @@ public class CoinSpace : SpaceEvent
 {
     [SerializeField] private int coinGain;
 
+    [SerializeField] private bool pauseMovement = false;
+    public bool skipStepCount = false;
+
     public override void StartEvent(SplineKnotAnimate animator)
     {
         Debug.Log("Evento Começado");
@@ -15,7 +18,19 @@ public class CoinSpace : SpaceEvent
         }
 
         Debug.Log("Ganhaste Monedas");
-        animator.TryGetComponent<PlayerStats>(out var playerStats);
+        currentPlayer.TryGetComponent<PlayerStats>(out var playerStats);
         playerStats.AddCoins(coinGain);
+        currentPlayer.EndTurn();
+
+    }
+
+    public override bool PauseMovement()
+    {
+        return pauseMovement;
+    }
+
+    public override bool SkipStepCount()
+    {
+        return skipStepCount;
     }
 }

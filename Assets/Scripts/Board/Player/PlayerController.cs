@@ -48,7 +48,6 @@ public class PlayerController : MonoBehaviour
             Debug.LogError("This player is not registered in TurnManager!");
         }
     }
-
     public void ConfirmTurn()
     {
         if (!IsMyTurn()) return;
@@ -87,6 +86,13 @@ public class PlayerController : MonoBehaviour
         }
 
         splineKnotAnimator.Animate(finalRoll);
+    }
+
+    public void GoBackwards()
+    {
+        Debug.Log("Para atras");
+        ContinueMovement();
+        splineKnotAnimator.MoveBackward(1);
     }
 
     public void ChangeJunction(int direction)
@@ -128,7 +134,6 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(1.5f);
         }
     }
-
     private void OnKnotEnter(SplineKnotIndex index)
     {
         var data = splineKnotData.splineDatas[index.Spline].knots[index.Knot];
@@ -147,6 +152,12 @@ public class PlayerController : MonoBehaviour
         trapSpaceData.PlaceTrap(this);
     }
 
+    public void BuyItem(int id)
+    {
+        stats.BuyItem(id);
+        ContinueMovement();
+    }
+
     public void PayWall()
     {
         currentSpace.TryGetComponent(out WallSpace wallSpaceData);
@@ -157,6 +168,7 @@ public class PlayerController : MonoBehaviour
     {
         currentSpace.TryGetComponent(out StationSpace stationSpaceData);
         splineKnotAnimator.TeleportToKnot(stationSpaceData.splineIndex, stationSpaceData.knotIndex);
+        EndTurn();
     }
 
     public void UseItem(int index)
@@ -164,9 +176,8 @@ public class PlayerController : MonoBehaviour
         asUsedItem = true;
         usedItemId = stats.inventory[index].Id; 
         stats.RemoveItem(index);
-        Debug.Log($"Usaste: {stats.inventory[index].Id}");
+        Debug.Log($"Usaste: {usedItemId}");
     }
-
 
     public void ContinueMovement()
     {

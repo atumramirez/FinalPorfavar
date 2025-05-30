@@ -7,9 +7,19 @@ public class StationLogic : NetworkBehaviour
 {
     [SerializeField] private GameObject StationMenu;
 
+    [SerializeField] private TurnManager TurnManager;
+
     public void OpenMenu()
     {
-        OpenMenuClientRpc();
+        var clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new[] { (ulong)TurnManager.currentPlayer }
+            }
+        };
+
+        OpenMenuClientRpc(clientRpcParams);
     }
 
     public void OnConfirm()
@@ -19,13 +29,19 @@ public class StationLogic : NetworkBehaviour
 
     public void OnCancel()
     {
-
+        OnCancelServerRpc();
     }
 
     [ClientRpc]
-    private void OpenMenuClientRpc()
+    private void OpenMenuClientRpc(ClientRpcParams clientRpcParams = default)
     {
         StationMenu.SetActive(true);
+    }
+
+    [ClientRpc]
+    private void HideMenuClientRpc()
+    {
+        StationMenu.SetActive(false);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -40,6 +56,23 @@ public class StationLogic : NetworkBehaviour
         if (playerObj != null && playerObj.TryGetComponent(out PlayerController controller))
         {
             controller.Teleport();
+            HideMenuClientRpc();
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void OnCancelServerRpc(ServerRpcParams rpcParams = default)
+    {
+        ulong clientId = rpcParams.Receive.SenderClientId;
+
+        string playerTag = $"Jogador{clientId}";
+
+        GameObject playerObj = GameObject.Find(playerTag);
+        Debug.Log("Procurar objeto.");
+        if (playerObj != null && playerObj.TryGetComponent(out PlayerController controller))
+        {
+            controller.EndTurn();
+            HideMenuClientRpc(); 
         }
     }
 }

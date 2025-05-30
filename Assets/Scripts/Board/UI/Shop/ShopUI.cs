@@ -79,24 +79,6 @@ public class ShopUI : MonoBehaviour
         }
     }
 
-    private void OnBuyButtonPressed()
-    {
-        if (selectedIndex >= 0 && selectedIndex < currentShopItems.Count)
-        {
-            Item selectedItem = currentShopItems[selectedIndex];
-
-            if (currentBuyer.TryBuyItem(selectedItem))
-            {
-                descriptionText.text = $"You bought {selectedItem.itemName}!";
-                buyButton.interactable = false;
-            }
-            else
-            {
-                descriptionText.text = $"Not enough coins or inventory full for {selectedItem.itemName}.";
-            }
-        }
-    }
-
     public void CloseShop()
     {
         gameObject.SetActive(false);

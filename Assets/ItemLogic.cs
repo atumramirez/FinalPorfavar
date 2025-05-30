@@ -8,6 +8,11 @@ public class ItemLogic : NetworkBehaviour
     [SerializeField] private GameObject menuPanel;
     [SerializeField] private Button[] itemButtons;
     [SerializeField] private Button confirmButton;
+    [SerializeField] private TextMeshProUGUI itemDescription;
+
+
+    [Header("Client")]
+    [SerializeField] private ClientController clientController;
 
     private int SelectedIndex = 0;
 
@@ -23,16 +28,16 @@ public class ItemLogic : NetworkBehaviour
             if (i < itemIds.Length)
             {
                 itemButtons[i].interactable = true;
-                itemButtons[i].GetComponentInChildren<Text>().text = itemDatabase.GetItemName(i);
+                itemButtons[i].GetComponentInChildren<TMP_Text>().text = itemDatabase.GetItemName(itemIds[i]);
 
                 int index = i;
                 itemButtons[i].onClick.RemoveAllListeners();
-                itemButtons[i].onClick.AddListener(() => OnItemButtonClicked(index, itemIds[i]));
+                itemButtons[i].onClick.AddListener(() => OnItemButtonClicked(index, itemIds[index]));
             }
             else
             {
                 itemButtons[i].interactable = false;
-                itemButtons[i].GetComponentInChildren<Text>().text = "Empty";
+                itemButtons[i].GetComponentInChildren<TMP_Text>().text = "Empty";
                 itemButtons[i].onClick.RemoveAllListeners();
             }
         }
@@ -52,6 +57,7 @@ public class ItemLogic : NetworkBehaviour
         }
         else
         {
+            itemDescription.text = "Select an Item";
             confirmButton.interactable = false;
         }
     }
@@ -59,6 +65,7 @@ public class ItemLogic : NetworkBehaviour
     public void OnConfirm()
     {
         OnCofirmServerRpc(SelectedIndex);
+        clientController.PressBack();
     }
 
     [ServerRpc(RequireOwnership = false)]

@@ -7,22 +7,29 @@ public class PlayerStats : MonoBehaviour
 {
     [SerializeField] private PlayerStatsServerUI PlayerStatsServerUI;
 
+    [Header("Coins")]
     [SerializeField] private int coins;
     public int Coins => coins;
-    [SerializeField] private int stars;
-    public int Stars => stars;
-    public int coinsBeforeChange;
 
-    public List<Item> inventory = new List<Item>();
+    [Header("Health")]
+    [SerializeField] private int health;
+    public int Health => health;
+
+    [HideInInspector] public int coinsBeforeChange;
+
+    [Header("Inventory")]
+    public List<Item> inventory = new();
     [SerializeField] private int maxItems = 3;
 
-
+    [Header("Item")]
+    [SerializeField] private ItemDatabase itemDatabase;
 
     [HideInInspector] public UnityEvent OnInitialize;
     [HideInInspector] public UnityEvent<int> OnAnimation;
 
     private void Start()
     {
+        PlayerStatsServerUI.UpdateHealthAndPointPoints(Health, Coins);
         OnInitialize.Invoke();
         coinsBeforeChange = coins;
     }
@@ -40,18 +47,21 @@ public class PlayerStats : MonoBehaviour
         coinsBeforeChange = coins;
         coins -= amount;
         coins = Mathf.Clamp(coins, 0, 999);
+        PlayerStatsServerUI.UpdatePointPoints(coins);
     }
 
-    public void AddStars(int amount)
+    public void AddHealth(int amount)
     {
-        stars += amount;
-        stars = Mathf.Clamp(stars, 0, 999);
+        health += amount;
+        health = Mathf.Clamp(health, 0, 999);
+        PlayerStatsServerUI.UpdateHealthPoints(health);
     }
 
     public void TakeDamage(int amount)
     {
-        stars -= amount;
-        stars = Mathf.Clamp(stars, 0, 999);
+        health -= amount;
+        health = Mathf.Clamp(health, 0, 999);
+        PlayerStatsServerUI.UpdateHealthPoints(health);
     }
 
     public void CoinAnimation(int value)
@@ -72,15 +82,11 @@ public class PlayerStats : MonoBehaviour
         return inventory.Count < maxItems;
     }
 
-    public bool TryBuyItem(Item item)
+    public void BuyItem(int Id)
     {
-        if (coins >= item.price)
-        {
-            coins -= item.price;
-            inventory.Add(item);
-            return true;
-        }
-        return false;
+        int price = itemDatabase.GetItemPrice(Id);
+        inventory.Add(itemDatabase.GetItemById(Id));
+        RemoveCoins(price);
     }
 
     public void GetItem(Item item)
@@ -92,6 +98,5 @@ public class PlayerStats : MonoBehaviour
     {
         Debug.Log("Item Removido");
         inventory.RemoveAt(index); 
-
     }
 }

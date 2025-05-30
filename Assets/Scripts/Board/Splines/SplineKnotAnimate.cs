@@ -81,11 +81,13 @@ public class SplineKnotAnimate : MonoBehaviour
 
     public void MoveBackward(int stepAmount = 1)
     {
+        /*
         if (isMoving)
         {
             Debug.Log("Already animating");
             return;
         }
+        */
 
         remainingSteps = stepAmount;
 
@@ -96,7 +98,6 @@ public class SplineKnotAnimate : MonoBehaviour
 
     public void TeleportToKnot(int splineIndex, int knotIndex)
     {
-        // Validate spline and knot
         if (splineIndex < 0 || splineIndex >= splineContainer.Splines.Count)
         {
             Debug.LogWarning("Invalid spline index.");
@@ -113,28 +114,23 @@ public class SplineKnotAnimate : MonoBehaviour
 
         currentKnot = new SplineKnotIndex(splineIndex, knotIndex);
 
-        // Reset movement
         isMoving = false;
         inJunction = false;
         Paused = false;
         remainingSteps = 0;
         walkableKnots.Clear();
 
-        // Update spline timing
         currentT = spline.ConvertIndexUnit(knotIndex, PathIndexUnit.Knot, PathIndexUnit.Normalized);
         nextKnot = new SplineKnotIndex(splineIndex, (knotIndex + 1) % spline.Knots.Count());
 
-        // Position the object at the knot
         Vector3 worldPos = (Vector3)spline.EvaluatePosition(currentT) + splineContainer.transform.position;
         transform.position = worldPos;
 
-        // Update rotation
         spline.Evaluate(currentT, out float3 pos, out float3 dir, out float3 up);
         Vector3 worldDirection = splineContainer.transform.TransformDirection(dir);
         if (worldDirection.sqrMagnitude > 0.001f)
             transform.rotation = Quaternion.LookRotation(worldDirection, Vector3.up);
 
-        // Update the current space variable if you added it
         currentSpace = currentKnot;
 
         Debug.Log($"Teleported to Spline {splineIndex}, Knot {knotIndex}");

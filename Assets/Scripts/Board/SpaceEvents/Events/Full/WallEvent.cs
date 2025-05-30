@@ -8,6 +8,9 @@ public class WallSpace : SpaceEvent
 
     [SerializeField] private WallLogic wallLogic;
 
+    [SerializeField] private bool pauseMovement = true;
+    public bool skipStepCount = true;
+
     public override void StartEvent(SplineKnotAnimate animator)
     {
         if (!animator.TryGetComponent<PlayerController>(out var currentPlayer))
@@ -33,7 +36,18 @@ public class WallSpace : SpaceEvent
 
     public void PayCrazy(PlayerController player)
     {
-        Debug.Log("Perdeu Playboy");
+        player.TryGetComponent<PlayerStats>(out var stats);
+        stats.RemoveCoins(wallCost);
         player.ContinueMovement();
+    }
+
+    public override bool PauseMovement()
+    {
+        return pauseMovement;
+    }
+
+    public override bool SkipStepCount()
+    {
+        return skipStepCount;
     }
 }

@@ -4,31 +4,16 @@ using UnityEngine.Splines;
 
 public class ServerUIManager : NetworkBehaviour
 {
-    ///
 
-
-    /// <summary>
-    /// Menu Cliente
-    /// </summary>
     [SerializeField] private GameObject ReadyMenu;
     [SerializeField] private GameObject ClientMenu;
-    [SerializeField] private GameObject StationPromptMenu;
 
-    /// <summary>
-    /// Menus
-    /// </summary>
     [Header("Client Buttons")]
     [SerializeField] private GameObject PlayerMenu;
     [SerializeField] private GameObject RollMenu;
 
     [Header("Junction")]
     [SerializeField] private GameObject JunctionMenu;
-
-    [Header("Shop")]
-    [SerializeField] private GameObject ShopPromptMenu;
-
-    [Header("Trap")]
-    [SerializeField] private GameObject TrapPromptMenu;
 
     public void ShowReadyMenu(ulong targetClientId)
     {
@@ -80,9 +65,6 @@ public class ServerUIManager : NetworkBehaviour
         HideAllButtonsClientRpc(clientRpcParams);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
 
     [ClientRpc]
     private void ShowReadyMenuClientRpc(ClientRpcParams clientRpcParams = default)
@@ -90,7 +72,7 @@ public class ServerUIManager : NetworkBehaviour
         ReadyMenu.SetActive(true);
         ClientMenu.SetActive(false);
         JunctionMenu.SetActive(false);
-        ShopPromptMenu.SetActive(false);
+
     }
 
     [ClientRpc]
@@ -99,7 +81,6 @@ public class ServerUIManager : NetworkBehaviour
         ReadyMenu.SetActive(false);
         ClientMenu.SetActive(true);
         JunctionMenu.SetActive(false);
-        ShopPromptMenu.SetActive(false);
     }
 
     [ClientRpc]
@@ -108,7 +89,6 @@ public class ServerUIManager : NetworkBehaviour
         ReadyMenu.SetActive(false);
         ClientMenu.SetActive(false);
         JunctionMenu.SetActive(true);
-        ShopPromptMenu.SetActive(false);
     }
 
     [ClientRpc]

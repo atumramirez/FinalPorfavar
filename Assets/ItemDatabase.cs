@@ -15,6 +15,11 @@ public class ItemDatabase : MonoBehaviour
         return null;
     }
 
+    public int GetId(Item item)
+    {
+        return item.Id;
+    }
+
     public string GetItemName(int id)
     {
         foreach (Item item in items)
@@ -24,5 +29,27 @@ public class ItemDatabase : MonoBehaviour
         }
         Debug.LogWarning("Item with ID " + id + " not found in the database.");
         return null;
+    }
+
+    public string GetItemDescription(int id)
+    {
+        foreach (Item item in items)
+        {
+            if (item.Id == id)
+                return item.description;
+        }
+        Debug.LogWarning("Item with ID " + id + " not found in the database.");
+        return null;
+    }
+
+    public int GetItemPrice(int id)
+    {
+        foreach (Item item in items)
+        {
+            if (item.Id == id)
+                return item.price;
+        }
+        Debug.LogWarning("Item with ID " + id + " not found in the database.");
+        return 0;
     }
 }

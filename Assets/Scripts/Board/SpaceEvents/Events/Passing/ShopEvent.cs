@@ -7,6 +7,8 @@ public class ShopSpace : SpaceEvent
     [SerializeField] private bool pauseMovement = true;
     public bool skipStepCount = true;
 
+    [SerializeField] private SpaceType spaceType = SpaceType.Passing;
+
     private void Start()
     {
         string Tag = "ShopLogic";
@@ -25,5 +27,10 @@ public class ShopSpace : SpaceEvent
     public override bool SkipStepCount()
     {
         return skipStepCount;
+    }
+
+    public override SpaceType GetSpaceType()
+    {
+        return spaceType;
     }
 }

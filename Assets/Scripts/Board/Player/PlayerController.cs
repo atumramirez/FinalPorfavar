@@ -10,11 +10,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ServerUIManager serverUIManager;
     [SerializeField] private TurnManager turnManager;
 
-
     private SplineKnotInstantiate splineKnotData;
     private int index = 0;
     private int currentClient = 1;
-
 
     private SplineKnotData currentSpace;
     public bool isReady = false;
@@ -62,7 +60,6 @@ public class PlayerController : MonoBehaviour
 
         asRolled = true;
         int randomNumber = 1;
-
         int finalRoll = randomNumber;
 
 
@@ -84,7 +81,6 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log($"Player {index} rolled: {randomNumber}");
         }
-
         splineKnotAnimator.Animate(finalRoll);
     }
 
@@ -123,13 +119,8 @@ public class PlayerController : MonoBehaviour
         IEnumerator DelayCoroutine()
         {
             yield return new WaitForSeconds(0.08f);
-            data.Land(splineKnotAnimator, stats);
+            data.Land(splineKnotAnimator);
             OnMovementStart.Invoke(false);
-            
-            if (data.spaceEvent == null)
-            {
-                EndTurn();
-            }
 
             yield return new WaitForSeconds(1.5f);
         }
@@ -138,7 +129,7 @@ public class PlayerController : MonoBehaviour
     {
         var data = splineKnotData.splineDatas[index.Spline].knots[index.Knot];
         currentSpace = data;
-        data.EnterKnot(splineKnotAnimator, stats);
+        data.EnterKnot(splineKnotAnimator);
         OnMovementUpdate.Invoke(splineKnotAnimator.Step);
     }
 
@@ -183,6 +174,12 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Anda");
         splineKnotAnimator.Paused = false;
+    }
+
+    public void StopMovement()
+    {
+        Debug.Log("Anda");
+        splineKnotAnimator.Paused = true;
     }
 
     void Update()

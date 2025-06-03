@@ -10,13 +10,12 @@ public class SplineKnotData : NetworkBehaviour
     [HideInInspector] public UnityEvent<int> OnLand;
 
     [SerializeField] private bool pauseMovement = false;
-    [SerializeField] public bool skipStepCount = false;
+    public bool skipStepCount = false;
 
     public enum SpaceType {None, Full, Passing}
-    [SerializeField] private SpaceType spaceType = SpaceType.Full;
+    private readonly SpaceType spaceType = SpaceType.Full;
 
-    [Header("Event")]
-    [SerializeField] public SpaceEvent spaceEvent;
+    private SpaceEvent spaceEvent;
 
     private void Start()
     {
@@ -25,7 +24,7 @@ public class SplineKnotData : NetworkBehaviour
        skipStepCount = spaceEvent.SkipStepCount();
     }
 
-    public void EnterKnot(SplineKnotAnimate splineKnotAnimator, PlayerStats playerStats)
+    public void EnterKnot(SplineKnotAnimate splineKnotAnimator)
     {
         splineKnotAnimator.Paused = pauseMovement;
 
@@ -34,7 +33,7 @@ public class SplineKnotData : NetworkBehaviour
             spaceEvent.StartEvent(splineKnotAnimator);
     }
 
-    public void Land(SplineKnotAnimate splineKnotAnimator, PlayerStats playerStats)
+    public void Land(SplineKnotAnimate splineKnotAnimator)
     {
         if (spaceEvent != null && spaceType == SpaceType.Full)
 

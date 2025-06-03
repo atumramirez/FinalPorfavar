@@ -1,12 +1,13 @@
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class CoinSpace : SpaceEvent
 {
-    [SerializeField] private int coinGain;
+    [SerializeField] private int coinGain = 10;
 
     [SerializeField] private bool pauseMovement = false;
     public bool skipStepCount = false;
+
+    [SerializeField] private SpaceType spaceType = SpaceType.Full;
 
     public override void StartEvent(SplineKnotAnimate animator)
     {
@@ -21,7 +22,6 @@ public class CoinSpace : SpaceEvent
         currentPlayer.TryGetComponent<PlayerStats>(out var playerStats);
         playerStats.AddCoins(coinGain);
         currentPlayer.EndTurn();
-
     }
 
     public override bool PauseMovement()
@@ -32,5 +32,10 @@ public class CoinSpace : SpaceEvent
     public override bool SkipStepCount()
     {
         return skipStepCount;
+    }
+
+    public override SpaceType GetSpaceType()
+    {
+        return spaceType;
     }
 }

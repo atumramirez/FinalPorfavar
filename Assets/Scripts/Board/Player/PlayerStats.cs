@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
@@ -6,6 +5,8 @@ using System.Collections.Generic;
 public class PlayerStats : MonoBehaviour
 {
     [SerializeField] private PlayerStatsServerUI PlayerStatsServerUI;
+    [SerializeField] private DiscardItemLogic discardLogic;
+    [SerializeField] private PlayerController playerController;
 
     [Header("Coins")]
     [SerializeField] private int coins;
@@ -15,7 +16,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private int health;
     public int Health => health;
 
-    [HideInInspector] public int coinsBeforeChange;
+    [HideInInspector] public int coinsBeforeChange; 
 
     [Header("Inventory")]
     public List<Item> inventory = new();
@@ -76,7 +77,7 @@ public class PlayerStats : MonoBehaviour
         coinsBeforeChange = coins;
     }
 
-    //Shop stuff
+    //ITENS//
     public bool HasInventorySpace()
     {
         return inventory.Count < maxItems;
@@ -85,18 +86,36 @@ public class PlayerStats : MonoBehaviour
     public void BuyItem(int Id)
     {
         int price = itemDatabase.GetItemPrice(Id);
-        inventory.Add(itemDatabase.GetItemById(Id));
+        GetItem(itemDatabase.GetItemById(Id));
         RemoveCoins(price);
-    }
-
-    public void GetItem(Item item)
-    {
-        inventory.Add(item);
     }
 
     public void RemoveItem(int index)
     {
         Debug.Log("Item Removido");
-        inventory.RemoveAt(index); 
+        inventory.RemoveAt(index);
+        playerController.ContinueMovement();
+    }
+
+    public void GetItem(Item item)
+    {
+        inventory.Add(item);
+        if (!HasInventorySpace())
+        {
+            Debug.Log("Sem espaço");
+            DiscardItem();
+        }
+    }
+
+    public void DiscardItem()
+    {
+        Debug.Log("Tou todo maluco");
+        playerController.StopMovement();    
+        int[] ids = new int[inventory.Count];
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            ids[i] = itemDatabase.GetId(inventory[i]);
+        }
+        discardLogic.OpenMenu(ids);
     }
 }

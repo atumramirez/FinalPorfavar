@@ -49,7 +49,7 @@ public class ItemLogic : NetworkBehaviour
         Debug.Log($"Selected item: {itemDatabase.GetItemName(id)}");
     }
 
-    void UpdateUI(int index)
+    public void UpdateUI(int index)
     {
         if (index >= 0)
         {

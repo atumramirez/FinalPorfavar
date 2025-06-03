@@ -7,6 +7,8 @@ public class StationSpace : SpaceEvent
     public int splineIndex;
     public int knotIndex;
 
+    [SerializeField] private SpaceType spaceType = SpaceType.Full;
+
     private void Start()
     {
         string Tag = "StationLogic";
@@ -25,5 +27,10 @@ public class StationSpace : SpaceEvent
         }
 
         StationLogic.OpenMenu();
+    }
+
+    public override SpaceType GetSpaceType()
+    {
+        return spaceType;
     }
 }

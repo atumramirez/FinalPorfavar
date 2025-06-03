@@ -11,6 +11,8 @@ public class WallSpace : SpaceEvent
     [SerializeField] private bool pauseMovement = true;
     public bool skipStepCount = true;
 
+    [SerializeField] private SpaceType spaceType = SpaceType.Passing;
+
     public override void StartEvent(SplineKnotAnimate animator)
     {
         if (!animator.TryGetComponent<PlayerController>(out var currentPlayer))
@@ -49,5 +51,10 @@ public class WallSpace : SpaceEvent
     public override bool SkipStepCount()
     {
         return skipStepCount;
+    }
+
+    public override SpaceType GetSpaceType()
+    {
+        return spaceType;
     }
 }

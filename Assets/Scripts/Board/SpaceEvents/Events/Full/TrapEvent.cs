@@ -1,4 +1,3 @@
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class TrapSpace : SpaceEvent
@@ -15,10 +14,11 @@ public class TrapSpace : SpaceEvent
     [SerializeField] private bool pauseMovement = false;
     public bool skipStepCount = false;
 
+    [SerializeField] private SpaceType spaceType = SpaceType.Full;
+
     private void Start()
     {
         string Tag = "TrapLogic";
-
         TrapLogic = GameObject.Find(Tag).GetComponent<TrapLogic>();
     }
     public override void StartEvent(SplineKnotAnimate animator)
@@ -68,7 +68,7 @@ public class TrapSpace : SpaceEvent
 
     public void PlaceTrap(PlayerController player)
     {
-        Debug.Log("Trap loca");
+        Debug.Log("Trap colocada");
         PlayerStats stats = player.GetComponent<PlayerStats>();
         stats.RemoveCoins(trapCost);
         hasTrap = true;
@@ -84,5 +84,10 @@ public class TrapSpace : SpaceEvent
     public override bool SkipStepCount()
     {
         return skipStepCount;
+    }
+
+    public override SpaceType GetSpaceType()
+    {
+        return spaceType;
     }
 }

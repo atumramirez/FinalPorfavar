@@ -7,6 +7,9 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private int NumRounds;
     [SerializeField] private NumberRoundsUI NumberRoundsUI;
 
+    [SerializeField] private MinigameManager minigameManager;
+    private bool waitingForMinigame = false;
+
     public List<PlayerController> players = new();
     public int currentPlayerIndex { get; private set; } = 0;
     public int currentPlayer = 0;
@@ -70,15 +73,31 @@ public class TurnManager : MonoBehaviour
         turnInProgress = false;
 
         currentPlayerIndex++;
-        currentPlayer = currentPlayerIndex + 1; 
+        currentPlayer = currentPlayerIndex + 1;
 
         if (currentPlayerIndex >= players.Count)
         {
-            StartRound(); 
+            if (minigameManager != null)
+            {
+                waitingForMinigame = true;
+                minigameManager.OnMinigameEnd.AddListener(OnMinigameComplete);
+                minigameManager.StartMinigame();
+            }
+            else
+            {
+                StartRound(); 
+            }
         }
         else
         {
-            StartPlayerTurn(); 
+            StartPlayerTurn();
         }
+    }
+
+    private void OnMinigameComplete()
+    {
+        minigameManager.OnMinigameEnd.RemoveListener(OnMinigameComplete);
+        waitingForMinigame = false;
+        StartRound(); 
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TrapSpace : SpaceEvent
 {
-    [SerializeField] private TrapLogic TrapLogic;
+    private TrapLogic TrapLogic;
 
     [Header("Trap")]
     public bool hasTrap = false;

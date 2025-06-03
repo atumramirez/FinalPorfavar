@@ -3,7 +3,7 @@ using UnityEngine.Splines;
 
 public class StationSpace : SpaceEvent
 {
-    [SerializeField] private StationLogic StationLogic;
+    private StationLogic StationLogic;
     public int splineIndex;
     public int knotIndex;
 

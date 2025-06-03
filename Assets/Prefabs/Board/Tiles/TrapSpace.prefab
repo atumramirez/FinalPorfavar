@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 8308161147841507139}
   - component: {fileID: 2610088286486467139}
   - component: {fileID: 3139204214486168287}
-  - component: {fileID: 3615025796228503490}
   m_Layer: 0
   m_Name: TrapSpace
   m_TagString: Untagged
@@ -159,23 +158,4 @@ MonoBehaviour:
       m_Calls: []
   pauseMovement: 0
   skipStepCount: 0
-  spaceType: 1
-  spaceEvent: {fileID: 3615025796228503490}
---- !u!114 &3615025796228503490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9021574972816852198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1137596c6c693c24b81a8bca176f8607, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TrapLogic: {fileID: 0}
-  hasTrap: 0
-  trapOwner: {fileID: 0}
-  trapCost: 5
-  rewardCoins: 3
-  damage: 2
+  eventSpace: 0

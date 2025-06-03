@@ -6,7 +6,7 @@ public class WallSpace : SpaceEvent
     public bool isClosed = false;
     public int wallCost = 15;
 
-    [SerializeField] private WallLogic wallLogic;
+    private WallLogic wallLogic;
 
     [SerializeField] private bool pauseMovement = true;
     public bool skipStepCount = true;

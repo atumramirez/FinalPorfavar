@@ -3,7 +3,7 @@ using UnityEngine;
 public class WallSpace : SpaceEvent
 {
     [Header("Wall")]
-    public bool isClosed = false;
+    [SerializeField] private bool isClosed = false;
     public int wallCost = 15;
 
     private WallLogic wallLogic;
@@ -20,14 +20,29 @@ public class WallSpace : SpaceEvent
             animator.Paused = false;
             return;
         }
+        Check(currentPlayer);
+    }
+
+    public void Check(PlayerController currentPlayer)
+    {
+        currentPlayer.TryGetComponent<PlayerStats>(out var stats);
 
         if (!isClosed)
         {
+            currentPlayer.ContinueMovement();
             Debug.Log("Passa caralho");
         }
         else
         {
-            OpenMenu();
+            if (wallCost > stats.Coins)
+            {
+                Debug.Log("N tens guito caralho");
+                Return(currentPlayer);
+            }
+            else
+            {
+                OpenMenu();
+            }
         }
     }
 
@@ -38,9 +53,16 @@ public class WallSpace : SpaceEvent
 
     public void PayCrazy(PlayerController player)
     {
+        Debug.Log("Pagado");
         player.TryGetComponent<PlayerStats>(out var stats);
         stats.RemoveCoins(wallCost);
         player.ContinueMovement();
+    }
+
+    public void Return(PlayerController player)
+    {
+        Debug.Log("Para tras sua loca");
+        player.GoBackwards();
     }
 
     public override bool PauseMovement()
@@ -56,5 +78,11 @@ public class WallSpace : SpaceEvent
     public override SpaceType GetSpaceType()
     {
         return spaceType;
+    }
+
+    public override void GetSpaceLogic()
+    {
+        string Tag = "WallLogic";
+        wallLogic = GameObject.Find(Tag).GetComponent<WallLogic>();
     }
 }

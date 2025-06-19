@@ -68,6 +68,7 @@ public class TurnManager : MonoBehaviour
 
     public void EndPlayerTurn()
     {
+        Debug.Log("Turno acabado");
         if (!turnInProgress) return;
 
         turnInProgress = false;

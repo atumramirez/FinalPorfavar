@@ -11,36 +11,35 @@ public class SplineKnotData : NetworkBehaviour
 
     [HideInInspector] public UnityEvent<int> OnLand;
 
-    [SerializeField] private bool pauseMovement = false;
-    [SerializeField] public bool skipStepCount = false;
+    private bool pauseMovement = false;
+    [HideInInspector] public bool skipStepCount = false;
 
-    public enum SpaceType {None, Full, Passing}
-    private readonly SpaceType spaceType = SpaceType.Full;
-
-    public enum Event {None, Coin, Trap, Gamble, Showtime, Item, Shop}
+    public enum Event {None, Coin, Trap, Gamble, Showtime, Item, Shop, Wall}
     [SerializeField] private Event eventSpace = Event.None;
 
-    private SpaceEvent spaceEvent;
+    [SerializeField] private SpaceEvent spaceEvent;
+    private SpaceEvent.SpaceType spaceType;
 
-    private void Start()
+    private void UpdateValues()
     {
-       spaceEvent = gameObject.GetComponent<SpaceEvent>();
-       pauseMovement = spaceEvent.PauseMovement();
-       skipStepCount = spaceEvent.SkipStepCount();
+        pauseMovement = spaceEvent.PauseMovement();
+        skipStepCount = spaceEvent.SkipStepCount();
+        spaceType = spaceEvent.GetSpaceType();
+        spaceEvent.GetSpaceLogic();
     }
 
     public void EnterKnot(SplineKnotAnimate splineKnotAnimator)
     {
         splineKnotAnimator.Paused = pauseMovement;
 
-        if (spaceEvent != null && spaceType == SpaceType.Passing)
+        if (spaceEvent != null && spaceType == SpaceEvent.SpaceType.Passing)
 
             spaceEvent.StartEvent(splineKnotAnimator);
     }
 
     public void Land(SplineKnotAnimate splineKnotAnimator)
     {
-        if (spaceEvent != null && spaceType == SpaceType.Full)
+        if (spaceEvent != null && spaceType == SpaceEvent.SpaceType.Full)
 
             spaceEvent.StartEvent(splineKnotAnimator);
     }
@@ -63,15 +62,28 @@ public class SplineKnotData : NetworkBehaviour
         {
             case Event.Coin:
                 gameObject.AddComponent<CoinSpace>();
+                spaceEvent = gameObject.GetComponent<CoinSpace>();
+                UpdateValues();
                 break;
             case Event.Trap:
                 gameObject.AddComponent<TrapSpace>();
+                spaceEvent = gameObject.GetComponent<TrapSpace>();
+                UpdateValues();
                 break;
             case Event.Item:
                 gameObject.AddComponent<ItemSpace>();
+                spaceEvent = gameObject.GetComponent<ItemSpace>();
+                UpdateValues();
                 break;
             case Event.Shop:
                 gameObject.AddComponent<ShopSpace>();
+                spaceEvent = gameObject.GetComponent<ShopSpace>();
+                UpdateValues();
+                break;
+            case Event.Wall:
+                gameObject.AddComponent<WallSpace>();
+                spaceEvent = gameObject.GetComponent<WallSpace>();
+                UpdateValues();
                 break;
         }
     }
@@ -80,7 +92,7 @@ public class SplineKnotData : NetworkBehaviour
     {
         var toRemove = new System.Type[]
         {
-            typeof(CoinSpace), typeof(TrapSpace), typeof(ItemSpace), typeof(ShopSpace)
+            typeof(CoinSpace), typeof(TrapSpace), typeof(ItemSpace), typeof(ShopSpace), typeof(WallSpace)
         };
 
         foreach (var type in toRemove)

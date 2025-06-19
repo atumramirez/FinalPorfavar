@@ -9,11 +9,6 @@ public class ShopSpace : SpaceEvent
 
     [SerializeField] private SpaceType spaceType = SpaceType.Passing;
 
-    private void Start()
-    {
-        string Tag = "ShopLogic";
-        shopLogic = GameObject.Find(Tag).GetComponent<ShopLogic>();
-    }
     public override void StartEvent(SplineKnotAnimate animator)
     {
         shopLogic.OpenPromptMenu();
@@ -32,5 +27,11 @@ public class ShopSpace : SpaceEvent
     public override SpaceType GetSpaceType()
     {
         return spaceType;
+    }
+
+    public override void GetSpaceLogic()
+    {
+        string Tag = "ShopLogic";
+        shopLogic = GameObject.Find(Tag).GetComponent<ShopLogic>(); ;   
     }
 }

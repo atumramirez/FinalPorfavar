@@ -17,7 +17,7 @@ public class MinigameManager : MonoBehaviour
 
     private IEnumerator SimulateMinigame()
     {
-        yield return new WaitForSeconds(5f); // Simulated minigame duration
+        yield return new WaitForSeconds(5f); 
         EndMinigame();
     }
 

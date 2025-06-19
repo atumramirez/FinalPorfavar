@@ -38,4 +38,8 @@ public class CoinSpace : SpaceEvent
     {
         return spaceType;
     }
+
+    public override void GetSpaceLogic()
+    {
+    }
 }

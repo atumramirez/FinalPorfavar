@@ -1,6 +1,5 @@
 using UnityEngine;
 using Unity.Netcode;
-using System.Security.Cryptography.X509Certificates;
 
 public class ClientController : NetworkBehaviour
 {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Shop Space Event", menuName = "BoardGame/SpaceEvents")]
+[CreateAssetMenu(menuName = "Game/Space Event")]
 public class SpaceEvent : MonoBehaviour
 {
     public enum SpaceType { None, Full, Passing }
@@ -23,6 +23,11 @@ public class SpaceEvent : MonoBehaviour
     virtual public SpaceType GetSpaceType()
     {
         return SpaceType.None;
+    }
+
+    virtual public void GetSpaceLogic()
+    {
+        
     }
 
 }

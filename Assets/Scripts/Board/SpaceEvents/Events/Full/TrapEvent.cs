@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TrapSpace : SpaceEvent
 {
-    private TrapLogic TrapLogic;
+    private TrapLogic trapLogic;
 
     [Header("Trap")]
     public bool hasTrap = false;
@@ -16,11 +16,16 @@ public class TrapSpace : SpaceEvent
 
     [SerializeField] private SpaceType spaceType = SpaceType.Full;
 
+    [SerializeField] private GameObject trap;
+    private Animator trapAnimator;
+
     private void Start()
     {
-        string Tag = "TrapLogic";
-        TrapLogic = GameObject.Find(Tag).GetComponent<TrapLogic>();
+        Transform child = transform.GetChild(0);
+        trap = child.gameObject;
+        trapAnimator = trap.GetComponent<Animator>();
     }
+
     public override void StartEvent(SplineKnotAnimate animator)
     {
         Debug.Log("Evento Começado");
@@ -58,12 +63,13 @@ public class TrapSpace : SpaceEvent
 
         if (stats.Coins >= trapCost)
         {
-            TrapLogic.OpenClient();
+            trapLogic.OpenClient();
         }
         else
         {
             Debug.Log("Not enough coins to place a trap.");
         }
+        TrapDamage(player);
     }
 
     public void PlaceTrap(PlayerController player)
@@ -74,6 +80,12 @@ public class TrapSpace : SpaceEvent
         hasTrap = true;
         trapOwner = player;
         player.EndTurn();
+    }
+
+    public void TrapDamage(PlayerController player)
+    {
+        Debug.Log("Louco");
+        trapAnimator.SetBool("Atacar", true);
     }
 
     public override bool PauseMovement()
@@ -89,5 +101,11 @@ public class TrapSpace : SpaceEvent
     public override SpaceType GetSpaceType()
     {
         return spaceType;
+    }
+
+    public override void GetSpaceLogic()
+    {
+        string Tag = "TrapLogic";
+        trapLogic = GameObject.Find(Tag).GetComponent<TrapLogic>();
     }
 }

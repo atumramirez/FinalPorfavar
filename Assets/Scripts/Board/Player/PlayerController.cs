@@ -86,9 +86,7 @@ public class PlayerController : MonoBehaviour
 
     public void GoBackwards()
     {
-        Debug.Log("Para atras");
-        ContinueMovement();
-        splineKnotAnimator.MoveBackward(1);
+        splineKnotAnimator.MoveBackward(10);
     }
 
     public void ChangeJunction(int direction)
@@ -153,6 +151,12 @@ public class PlayerController : MonoBehaviour
     {
         currentSpace.TryGetComponent(out WallSpace wallSpaceData);
         wallSpaceData.PayCrazy(this);
+    }
+
+    public void GoBack()
+    {
+        currentSpace.TryGetComponent(out WallSpace wallSpaceData);
+        wallSpaceData.Return(this);
     }
 
     public void Teleport()

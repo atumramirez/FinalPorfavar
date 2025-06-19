@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.Events;
+
 public class SplineKnotAnimate : MonoBehaviour
 {
     [SerializeField] private SplineContainer splineContainer;
@@ -81,19 +82,16 @@ public class SplineKnotAnimate : MonoBehaviour
 
     public void MoveBackward(int stepAmount = 1)
     {
-        /*
-        if (isMoving)
+        if (!Paused || isMoving)
         {
-            Debug.Log("Already animating");
+            Debug.LogWarning("MoveBackward called in invalid state: must be paused and not already moving.");
             return;
         }
-        */
 
-        remainingSteps = stepAmount;
-
+        Paused = false;
         currentSpace = currentKnot;
 
-        StartCoroutine(MoveBackwardAlongSpline());
+        StartCoroutine(MoveBackwardOneStepThenForward(stepAmount));
     }
 
     public void TeleportToKnot(int splineIndex, int knotIndex)
@@ -224,20 +222,11 @@ public class SplineKnotAnimate : MonoBehaviour
         }
     }
 
-    IEnumerator MoveBackwardAlongSpline()
+    IEnumerator MoveBackwardOneStepThenForward(int originalSteps)
     {
-        if (inJunction)
-        {
-            yield return new WaitUntil(() => inJunction == false);
-            OnEnterJunction.Invoke(false);
-            SelectJunctionPath(junctionIndex);
-        }
-
-        if (Paused)
-            yield return new WaitUntil(() => Paused == false);
-
         isMoving = true;
 
+        // Step 1: move one space backward
         Spline spline = splineContainer.Splines[currentKnot.Spline];
         int prevKnotIndex = (currentKnot.Knot - 1 + spline.Knots.Count()) % spline.Knots.Count();
         nextKnot = new SplineKnotIndex(currentKnot.Spline, prevKnotIndex);
@@ -253,47 +242,19 @@ public class SplineKnotAnimate : MonoBehaviour
             yield return null;
         }
 
-        if (currentT <= nextT || Mathf.Approximately(currentT, nextT))
-        {
-            currentKnot = nextKnot;
-            int newPrevKnotIndex = (currentKnot.Knot - 1 + spline.Knots.Count()) % spline.Knots.Count();
-            nextKnot = new SplineKnotIndex(currentKnot.Spline, newPrevKnotIndex);
+        // Finished backward movement
+        currentKnot = nextKnot;
+        currentSpace = currentKnot;
+        splineContainer.KnotLinkCollection.TryGetKnotLinks(currentKnot, out connectedKnots);
 
-            if (nextT == 0 && spline.Closed)
-                currentT = 1;
+        OnKnotEnter.Invoke(currentKnot);
+        OnKnotLand.Invoke(currentKnot);
 
-            connectedKnots = splineContainer.KnotLinkCollection.TryGetKnotLinks(currentKnot, out var links) ? links : null;
+        Debug.Log($"Moved backward to Spline {currentKnot.Spline}, Knot {currentKnot.Knot}");
 
-            if (IsJunctionKnot(currentKnot))
-            {
-                inJunction = true;
-                junctionIndex = 0;
-                isMoving = false;
-                OnEnterJunction.Invoke(true);
-                OnJunctionSelection.Invoke(junctionIndex);
-            }
-            else
-            {
-                if (!SkipStepCount)
-                    remainingSteps--;
-                else
-                    SkipStepCount = false;
-            }
-
-            OnKnotEnter.Invoke(currentKnot);
-
-            if (remainingSteps > 0)
-            {
-                StartCoroutine(MoveBackwardAlongSpline());
-            }
-            else
-            {
-                isMoving = false;
-                OnKnotLand.Invoke(currentKnot);
-                currentSpace = currentKnot;
-                Debug.Log($"Stopped at Spline {currentKnot.Spline}, Knot {currentKnot.Knot}");
-            }
-        }
+        // Step 2: continue moving forward for original steps
+        remainingSteps = originalSteps;
+        StartCoroutine(MoveAlongSpline());
     }
 
     void MoveAndRotate()

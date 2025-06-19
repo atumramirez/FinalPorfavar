@@ -62,8 +62,7 @@ public class WallLogic : NetworkBehaviour
         GameObject playerObj = GameObject.Find(playerTag);
         if (playerObj != null && playerObj.TryGetComponent(out PlayerController controller))
         {
-            controller.ContinueMovement();
-            controller.GoBackwards();
+            controller.GoBack();
             HideMenuClientRpc();
         }
     }
